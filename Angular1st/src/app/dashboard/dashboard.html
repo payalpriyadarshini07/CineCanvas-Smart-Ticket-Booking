@@ -1,0 +1,1990 @@
+<div class="customer-dashboard">
+
+  <!-- ========================================================= -->
+  <!-- SIDEBAR -->
+  <!-- ========================================================= -->
+
+  <aside class="sidebar">
+
+    <a routerLink="/movies" class="brand">
+      <span class="brand-icon">S</span>
+      SMART<span class="highlight">TICKET</span>
+    </a>
+
+    <div class="user-info">
+
+      <div class="user-avatar">
+        {{ userName.charAt(0).toUpperCase() }}
+      </div>
+
+      <h3>{{ userName }}</h3>
+      <p>{{ userEmail }}</p>
+
+      <span class="customer-label">
+        CUSTOMER ACCOUNT
+      </span>
+
+    </div>
+
+
+    <nav class="sidebar-nav">
+
+      <button
+        [class.active]="activeSection === 'overview'"
+        (click)="setActiveSection('overview')">
+
+        <span>🏠</span>
+        Overview
+
+      </button>
+
+
+      <a routerLink="/movies">
+
+        <span>🎬</span>
+        Browse Movies
+
+      </a>
+
+
+      <button
+        [class.active]="activeSection === 'bookings'"
+        (click)="setActiveSection('bookings')">
+
+        <span>🎟️</span>
+        My Bookings
+
+      </button>
+
+
+      <button
+        [class.active]="activeSection === 'history'"
+        (click)="setActiveSection('history')">
+
+        <span>📋</span>
+        Booking History
+
+      </button>
+
+
+      <button
+        [class.active]="activeSection === 'ai'"
+        (click)="setActiveSection('ai')">
+
+        <span>🤖</span>
+        AI Intelligence
+
+      </button>
+
+
+      <button
+        [class.active]="activeSection === 'profile'"
+        (click)="setActiveSection('profile')">
+
+        <span>👤</span>
+        My Profile
+
+      </button>
+
+    </nav>
+
+
+    <div class="sidebar-bottom">
+
+      <a routerLink="/movies">
+        ← Back to Movies
+      </a>
+
+
+      <button
+        class="logout-btn"
+        (click)="logout()">
+
+        🚪 Logout
+
+      </button>
+
+    </div>
+
+  </aside>
+
+
+  <!-- ========================================================= -->
+  <!-- MAIN CONTENT -->
+  <!-- ========================================================= -->
+
+  <main class="main-content">
+
+
+    <!-- ========================================================= -->
+    <!-- TOP HEADER -->
+    <!-- ========================================================= -->
+
+    <header class="top-header">
+
+      <div>
+
+        <span class="welcome-label">
+          CUSTOMER DASHBOARD
+        </span>
+
+        <h1>
+          Welcome back, {{ userName }}!
+        </h1>
+
+        <p>
+          Manage your bookings and enjoy your movie experience.
+        </p>
+
+      </div>
+
+
+      <button
+        class="refresh-btn"
+        (click)="loadBookings()">
+
+        ↻ Refresh
+
+      </button>
+
+    </header>
+
+
+    <!-- ========================================================= -->
+    <!-- OVERVIEW SECTION -->
+    <!-- ========================================================= -->
+
+    <section
+      *ngIf="activeSection === 'overview'">
+
+      <div class="stats-grid">
+
+
+        <!-- TOTAL BOOKINGS -->
+
+        <div class="stat-card total">
+
+          <div class="stat-icon">
+            🎟️
+          </div>
+
+          <div>
+
+            <h3>
+              {{ bookings.length }}
+            </h3>
+
+            <p>
+              Total Bookings
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <!-- CONFIRMED -->
+
+        <div class="stat-card confirmed">
+
+          <div class="stat-icon">
+            ✓
+          </div>
+
+          <div>
+
+            <h3>
+              {{ confirmedCount }}
+            </h3>
+
+            <p>
+              Confirmed
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <!-- CANCELLED -->
+
+        <div class="stat-card cancelled">
+
+          <div class="stat-icon">
+            ✕
+          </div>
+
+          <div>
+
+            <h3>
+              {{ cancelledCount }}
+            </h3>
+
+            <p>
+              Cancelled
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <!-- UPCOMING -->
+
+        <div class="stat-card upcoming">
+
+          <div class="stat-icon">
+            🎬
+          </div>
+
+          <div>
+
+            <h3>
+              {{ upcomingCount }}
+            </h3>
+
+            <p>
+              Upcoming Shows
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- ===================================================== -->
+      <!-- QUICK ACTIONS -->
+      <!-- ===================================================== -->
+
+      <div class="quick-actions">
+
+        <h2>
+          Quick Actions
+        </h2>
+
+
+        <div class="action-grid">
+
+
+          <a
+            routerLink="/movies"
+            class="action-card">
+
+            <span>
+              🎬
+            </span>
+
+            <h3>
+              Browse Movies
+            </h3>
+
+            <p>
+              Discover movies and book your favourite seats.
+            </p>
+
+            <strong>
+              Explore Movies →
+            </strong>
+
+          </a>
+
+
+          <button
+            class="action-card"
+            (click)="setActiveSection('bookings')">
+
+            <span>
+              🎟️
+            </span>
+
+            <h3>
+              My Bookings
+            </h3>
+
+            <p>
+              Check your upcoming movie reservations.
+            </p>
+
+            <strong>
+              View Bookings →
+            </strong>
+
+          </button>
+
+
+          <button
+            class="action-card"
+            (click)="setActiveSection('profile')">
+
+            <span>
+              👤
+            </span>
+
+            <h3>
+              My Profile
+            </h3>
+
+            <p>
+              View your customer account information.
+            </p>
+
+            <strong>
+              View Profile →
+            </strong>
+
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <!-- ===================================================== -->
+      <!-- RECENT BOOKINGS -->
+      <!-- ===================================================== -->
+
+      <section class="booking-section">
+
+        <div class="section-heading">
+
+          <div>
+
+            <h2>
+              Recent Bookings
+            </h2>
+
+            <p>
+              Your latest movie reservations.
+            </p>
+
+          </div>
+
+
+          <button
+            class="view-all"
+            (click)="setActiveSection('history')">
+
+            View All →
+
+          </button>
+
+        </div>
+
+
+        <p
+          *ngIf="loading"
+          class="message">
+
+          Loading your bookings...
+
+        </p>
+
+
+        <p
+          *ngIf="errorMessage"
+          class="error-message">
+
+          {{ errorMessage }}
+
+        </p>
+
+
+        <p
+          *ngIf="
+            !loading &&
+            !errorMessage &&
+            bookings.length === 0
+          "
+          class="message">
+
+          No bookings yet.
+          Browse movies to book your first ticket!
+
+        </p>
+
+
+        <div
+          class="recent-booking"
+          *ngFor="
+            let booking of bookings.slice(0, 3)
+          ">
+
+          <div>
+
+            <strong>
+              {{ booking.movieTitle }}
+            </strong>
+
+            <p>
+
+              {{ booking.showDate | date:'dd MMM yyyy' }}
+
+              ·
+
+              {{ booking.showTime }}
+
+            </p>
+
+          </div>
+
+
+          <span
+            class="status-badge"
+            [ngClass]="
+              booking.status.toLowerCase()
+            ">
+
+            {{ booking.status }}
+
+          </span>
+
+        </div>
+
+      </section>
+
+    </section>
+
+
+    <!-- ========================================================= -->
+    <!-- AI INTELLIGENCE SECTION -->
+    <!-- ========================================================= -->
+
+    <section
+      *ngIf="activeSection === 'ai'"
+      class="ai-dashboard-section">
+
+
+      <!-- ===================================================== -->
+      <!-- AI HEADER -->
+      <!-- ===================================================== -->
+
+      <div class="ai-dashboard-header">
+
+        <span class="ai-eyebrow">
+          SMARTTIX AI
+        </span>
+
+        <h2>
+          AI Intelligence
+        </h2>
+
+        <p>
+          Personalized recommendations, crowd prediction and smart booking security.
+        </p>
+
+      </div>
+
+
+      <!-- ========================================================= -->
+      <!-- MOVIE RECOMMENDATIONS -->
+      <!-- ========================================================= -->
+
+      <div
+        class="ai-tool-card recommendation-card">
+
+        <div class="ai-tool-icon">
+          🎬
+        </div>
+
+
+        <div class="ai-tool-content">
+
+          <span class="ai-tag">
+            PERSONALIZATION
+          </span>
+
+
+          <h3>
+            Movie Recommendations
+          </h3>
+
+
+          <p>
+            Discover movies selected by AI using your favorite genres
+            and preferences.
+          </p>
+
+
+          <!-- GENRE FORM -->
+
+          <div class="ai-form-row">
+
+
+            <div class="genre-selector">
+
+              <label>
+                Favorite Genres
+              </label>
+
+
+              <div class="genre-options">
+
+                <button
+                  type="button"
+                  *ngFor="
+                    let genre of availableGenres
+                  "
+                  [class.selected]="
+                    selectedGenres.includes(genre)
+                  "
+                  (click)="toggleGenre(genre)">
+
+                  {{ genre }}
+
+                </button>
+
+              </div>
+
+
+              <div
+                class="selected-genres"
+                *ngIf="
+                  selectedGenres.length > 0
+                ">
+
+                <strong>
+                  Selected:
+                </strong>
+
+
+                <span
+                  *ngFor="
+                    let genre of selectedGenres
+                  ">
+
+                  {{ genre }}
+
+                </span>
+
+              </div>
+
+            </div>
+
+
+            <!-- RESULTS LIMIT -->
+
+            <label>
+
+              Results
+
+              <input
+                type="number"
+                [(ngModel)]="recommendationLimit"
+                min="1"
+                max="20">
+
+            </label>
+
+          </div>
+
+
+          <!-- RECOMMENDATION BUTTON -->
+
+          <button
+            type="button"
+            class="ai-primary-btn"
+            (click)="getRecommendations()"
+            [disabled]="recommendationLoading">
+
+            {{
+              recommendationLoading
+                ? 'Analyzing...'
+                : 'Get AI Recommendations'
+            }}
+
+          </button>
+
+
+          <!-- LOADING -->
+
+          <p
+            *ngIf="recommendationLoading"
+            class="result-note">
+
+            AI is analyzing the SmartTix movie catalogue...
+
+          </p>
+
+
+          <!-- ERROR -->
+
+          <p
+            *ngIf="recommendationError"
+            class="ai-error">
+
+            {{ recommendationError }}
+
+          </p>
+
+
+          <!-- RESULTS -->
+
+          <div
+            *ngIf="
+              recommendations.length > 0
+            "
+            class="ai-results">
+
+            <h4>
+              Recommended For You
+            </h4>
+
+
+            <div
+              class="ai-result-item"
+              *ngFor="
+                let movie of recommendations
+              ">
+
+              <div>
+
+                <strong>
+                  {{ movie.title }}
+                </strong>
+
+                <span>
+                  {{ movie.genre || 'Movie' }}
+                </span>
+
+              </div>
+
+
+              <span
+                *ngIf="movie.popularity">
+
+                Popularity:
+                {{ movie.popularity }}
+
+              </span>
+
+            </div>
+
+
+            <p
+              *ngIf="recommendationNote"
+              class="result-note">
+
+              {{ recommendationNote }}
+
+            </p>
+
+          </div>
+
+
+          <!-- NO RESULTS -->
+
+          <p
+            *ngIf="
+              !recommendationLoading &&
+              !recommendationError &&
+              recommendations.length === 0
+            "
+            class="result-note">
+
+            Select your favorite genres and click
+
+            <strong>
+              Get AI Recommendations
+            </strong>.
+
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <!-- ========================================================= -->
+      <!-- DEMAND & CROWD PREDICTION -->
+      <!-- ========================================================= -->
+
+      <div
+        class="ai-tool-card demand-card">
+
+        <div class="ai-tool-icon">
+          📊
+        </div>
+
+
+        <div class="ai-tool-content">
+
+          <span class="ai-tag">
+            CROWD INTELLIGENCE
+          </span>
+
+
+          <h3>
+            Demand & Crowd Prediction
+          </h3>
+
+
+          <p>
+            Check expected demand and occupancy before choosing a show.
+          </p>
+
+
+          <!-- DATABASE DATA -->
+
+          <div class="ai-form-row">
+
+
+            <!-- SHOW ID -->
+
+            <label>
+
+              Show ID
+
+              <input
+                type="number"
+                [value]="demandShowId"
+                readonly>
+
+            </label>
+
+
+            <!-- TOTAL SEATS -->
+
+            <label>
+
+              Total Seats
+
+              <input
+                type="number"
+                [value]="demandTotalSeats"
+                readonly>
+
+            </label>
+
+
+            <!-- CURRENT BOOKINGS -->
+
+            <label>
+
+              Current Bookings
+
+              <input
+                type="number"
+                [value]="demandCurrentBookings"
+                readonly>
+
+            </label>
+
+
+            <!-- HOURS -->
+
+            <label>
+
+              Hours Until Show
+
+              <input
+                type="number"
+                [value]="demandHoursUntilShow"
+                readonly>
+
+            </label>
+
+          </div>
+
+
+          <!-- SHOW INFORMATION -->
+
+          <p
+            *ngIf="
+              demandMovieTitle ||
+              demandShowDate ||
+              demandShowTime
+            "
+            class="result-note">
+
+            <strong>
+              {{ demandMovieTitle }}
+            </strong>
+
+            <span
+              *ngIf="demandShowDate">
+
+              • {{ demandShowDate }}
+
+            </span>
+
+            <span
+              *ngIf="demandShowTime">
+
+              • {{ demandShowTime }}
+
+            </span>
+
+          </p>
+
+
+          <!-- DEMAND BUTTON -->
+
+          <button
+            type="button"
+            class="ai-primary-btn"
+            (click)="predictDemand()"
+            [disabled]="demandLoading">
+
+            {{
+              demandLoading
+                ? 'Predicting...'
+                : 'Predict Crowd Demand'
+            }}
+
+          </button>
+
+
+          <!-- LOADING -->
+
+          <p
+            *ngIf="demandLoading"
+            class="result-note">
+
+            AI is calculating crowd demand...
+
+          </p>
+
+
+          <!-- ERROR -->
+
+          <p
+            *ngIf="demandError"
+            class="ai-error">
+
+            {{ demandError }}
+
+          </p>
+
+
+          <!-- DEMAND RESULT -->
+
+          <div
+            *ngIf="demandResult"
+            class="ai-results">
+
+            <h4>
+              AI Prediction
+            </h4>
+
+
+            <div class="prediction-grid">
+
+
+              <div>
+
+                <span>
+                  Demand
+                </span>
+
+                <strong>
+                  {{
+                    demandResult.demand_level ||
+                    'N/A'
+                  }}
+                </strong>
+
+              </div>
+
+
+              <div>
+
+                <span>
+                  Predicted Bookings
+                </span>
+
+                <strong>
+                  {{
+                    demandResult.predicted_total_bookings ??
+                    'N/A'
+                  }}
+                </strong>
+
+              </div>
+
+
+              <div>
+
+                <span>
+                  Occupancy
+                </span>
+
+                <strong>
+                  {{
+                    demandResult.predicted_occupancy_percentage ??
+                    'N/A'
+                  }}%
+                </strong>
+
+              </div>
+
+            </div>
+
+
+            <p
+              *ngIf="demandResult.note">
+
+              {{ demandResult.note }}
+
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- ========================================================= -->
+      <!-- BOOKING SECURITY -->
+      <!-- ========================================================= -->
+
+      <div
+        class="ai-tool-card security-card">
+
+        <div class="ai-tool-icon">
+          🛡️
+        </div>
+
+
+        <div class="ai-tool-content">
+
+          <span class="ai-tag">
+            SMART SECURITY
+          </span>
+
+
+          <h3>
+            Booking Security Check
+          </h3>
+
+
+          <p>
+            AI analyzes your latest confirmed booking for unusual
+            activity and transaction risk.
+          </p>
+
+
+          <!-- SECURITY BUTTON -->
+
+          <button
+            type="button"
+            class="ai-primary-btn"
+            (click)="detectFraud()"
+            [disabled]="fraudLoading">
+
+            {{
+              fraudLoading
+                ? 'Checking...'
+                : 'Run Security Check'
+            }}
+
+          </button>
+
+
+          <!-- LOADING -->
+
+          <p
+            *ngIf="fraudLoading"
+            class="result-note">
+
+            AI is analyzing your booking security...
+
+          </p>
+
+
+          <!-- ERROR -->
+
+          <p
+            *ngIf="fraudError"
+            class="ai-error">
+
+            {{ fraudError }}
+
+          </p>
+
+
+          <!-- ================================================= -->
+          <!-- SECURITY RESULT -->
+          <!-- ================================================= -->
+
+          <div
+            *ngIf="
+              fraudResult &&
+              !fraudLoading
+            "
+            class="security-result">
+
+
+            <!-- ================================================= -->
+            <!-- RESULT HEADER -->
+            <!-- ================================================= -->
+
+            <div class="security-result-header">
+
+              <div>
+
+                <span class="security-small-label">
+                  SECURITY ASSESSMENT
+                </span>
+
+                <h3>
+                  Booking Risk Analysis
+                </h3>
+
+              </div>
+
+
+              <!-- RISK LEVEL -->
+
+              <div
+                class="risk-badge"
+                [class.risk-low]="
+                  fraudResult.risk_level === 'LOW'
+                "
+                [class.risk-medium]="
+                  fraudResult.risk_level === 'MEDIUM'
+                "
+                [class.risk-high]="
+                  fraudResult.risk_level === 'HIGH'
+                ">
+
+                {{
+                  fraudResult.risk_level ||
+                  'UNKNOWN'
+                }}
+
+              </div>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- RISK SCORE -->
+            <!-- ================================================= -->
+
+            <div class="risk-score-section">
+
+              <div class="risk-score-top">
+
+                <span>
+                  Risk Score
+                </span>
+
+                <strong>
+                  {{
+                    fraudResult.risk_score ?? 0
+                  }}/100
+                </strong>
+
+              </div>
+
+
+              <div class="risk-bar">
+
+                <div
+                  class="risk-bar-fill"
+                  [style.width.%]="
+                    fraudResult.risk_score || 0
+                  "
+                  [class.risk-bar-low]="
+                    fraudResult.risk_level === 'LOW'
+                  "
+                  [class.risk-bar-medium]="
+                    fraudResult.risk_level === 'MEDIUM'
+                  "
+                  [class.risk-bar-high]="
+                    fraudResult.risk_level === 'HIGH'
+                  ">
+                </div>
+
+              </div>
+
+
+              <div class="risk-scale">
+
+                <span>
+                  LOW
+                </span>
+
+                <span>
+                  MEDIUM
+                </span>
+
+                <span>
+                  HIGH
+                </span>
+
+              </div>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- REAL DATABASE DATA USED -->
+            <!-- ================================================= -->
+
+            <div class="security-data">
+
+              <h4>
+                Data Used for Risk Assessment
+              </h4>
+
+
+              <div class="security-data-grid">
+
+
+                <!-- LATEST MOVIE -->
+
+                <div class="security-data-card">
+
+                  <span>
+                    Latest Booking
+                  </span>
+
+                  <strong>
+                    {{ fraudBookingMovie || 'N/A' }}
+                  </strong>
+
+                  <small>
+                    Latest confirmed booking
+                  </small>
+
+                </div>
+
+
+                <!-- BOOKING AMOUNT -->
+
+                <div class="security-data-card">
+
+                  <span>
+                    Booking Amount
+                  </span>
+
+                  <strong>
+                    ₹{{ fraudBookingAmount || 0 }}
+                  </strong>
+
+                  <small>
+                    Latest confirmed booking
+                  </small>
+
+                </div>
+
+
+                <!-- BOOKING FREQUENCY -->
+
+                <div class="security-data-card">
+
+                  <span>
+                    Booking Frequency
+                  </span>
+
+                  <strong>
+                    {{ bookings.length }}
+                  </strong>
+
+                  <small>
+                    Total database bookings
+                  </small>
+
+                </div>
+
+
+                <!-- CONFIRMED BOOKINGS -->
+
+                <div class="security-data-card">
+
+                  <span>
+                    Confirmed Bookings
+                  </span>
+
+                  <strong>
+                    {{ confirmedCount }}
+                  </strong>
+
+                  <small>
+                    Confirmed database records
+                  </small>
+
+                </div>
+
+
+                <!-- RECENT ACTIVITY -->
+
+                <div class="security-data-card">
+
+                  <span>
+                    Recent Activity
+                  </span>
+
+                  <strong>
+                    {{
+                      fraudResult.bookings_in_last_minute ??
+                      0
+                    }}
+                  </strong>
+
+                  <small>
+                    Bookings in last 60 seconds
+                  </small>
+
+                </div>
+
+
+                <!-- FAILED PAYMENTS -->
+
+                <div class="security-data-card">
+
+                  <span>
+                    Failed Payments
+                  </span>
+
+                  <strong>
+                    {{
+                      fraudResult.failed_payment_attempts ??
+                      0
+                    }}
+                  </strong>
+
+                  <small>
+                    Recorded failed attempts
+                  </small>
+
+                </div>
+
+              </div>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- RISK FACTORS -->
+            <!-- ================================================= -->
+
+            <div class="security-factors">
+
+              <h4>
+                Risk Factors
+              </h4>
+
+
+              <!-- RISK FACTORS EXIST -->
+
+              <div
+                *ngIf="
+                  fraudResult.risk_factors?.length > 0
+                ">
+
+                <div
+                  class="risk-factor"
+                  *ngFor="
+                    let factor of fraudResult.risk_factors
+                  ">
+
+                  <span class="factor-icon">
+                    ⚠
+                  </span>
+
+                  <span>
+                    {{ factor }}
+                  </span>
+
+                </div>
+
+              </div>
+
+
+              <!-- NO RISK FACTORS -->
+
+              <div
+                *ngIf="
+                  !fraudResult.risk_factors?.length
+                "
+                class="safe-factor">
+
+                <span>
+                  ✓
+                </span>
+
+                <span>
+                  No suspicious activity detected from
+                  the recorded booking data.
+                </span>
+
+              </div>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- RECOMMENDED ACTION -->
+            <!-- ================================================= -->
+
+            <div class="security-action">
+
+              <span>
+                Recommended Action
+              </span>
+
+              <strong>
+                {{
+                  fraudResult.suggested_action ||
+                  'No immediate action'
+                }}
+              </strong>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- EXPLANATION -->
+            <!-- ================================================= -->
+
+            <div class="security-note">
+
+              <span>
+                ⓘ
+              </span>
+
+              <p>
+                The risk score is calculated from booking
+                amount, booking frequency, recent booking
+                activity and recorded payment failures.
+              </p>
+
+            </div>
+
+
+            <!-- ================================================= -->
+            <!-- HOW RISK IS MEASURED -->
+            <!-- ================================================= -->
+
+            <div class="risk-methodology">
+
+              <h4>
+                How Risk Is Measured
+              </h4>
+
+
+              <div class="risk-rule">
+
+                <span>
+                  Booking amount ≥ ₹10,000
+                </span>
+
+                <strong>
+                  +30
+                </strong>
+
+              </div>
+
+
+              <div class="risk-rule">
+
+                <span>
+                  5+ bookings within 1 minute
+                </span>
+
+                <strong>
+                  +30
+                </strong>
+
+              </div>
+
+
+              <div class="risk-rule">
+
+                <span>
+                  3+ failed payment attempts
+                </span>
+
+                <strong>
+                  +40
+                </strong>
+
+              </div>
+
+
+              <div class="risk-rule total-rule">
+
+                <span>
+                  Maximum Risk Score
+                </span>
+
+                <strong>
+                  100
+                </strong>
+
+              </div>
+
+
+              <div class="risk-level-guide">
+
+                <div>
+                  <span class="guide-dot low-dot"></span>
+                  <strong>0–29</strong>
+                  LOW
+                </div>
+
+                <div>
+                  <span class="guide-dot medium-dot"></span>
+                  <strong>30–59</strong>
+                  MEDIUM
+                </div>
+
+                <div>
+                  <span class="guide-dot high-dot"></span>
+                  <strong>60–100</strong>
+                  HIGH
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- ========================================================= -->
+    <!-- MY BOOKINGS SECTION -->
+    <!-- ========================================================= -->
+
+    <section
+      *ngIf="activeSection === 'bookings'"
+      class="booking-section">
+
+
+      <h2>
+        My Bookings
+      </h2>
+
+
+      <p>
+        View your confirmed and upcoming reservations.
+      </p>
+
+
+      <p
+        *ngIf="loading"
+        class="message">
+
+        Loading bookings...
+
+      </p>
+
+
+      <div
+        class="recent-booking"
+        *ngFor="
+          let booking of bookings
+        ">
+
+        <div>
+
+          <strong>
+            {{ booking.movieTitle }}
+          </strong>
+
+
+          <p>
+
+            {{ booking.showDate | date:'dd MMM yyyy' }}
+
+            ·
+
+            {{ booking.showTime }}
+
+            ·
+
+            Seats:
+            {{ booking.seatNumbers.join(', ') }}
+
+          </p>
+
+
+          <small>
+            Booking #{{ booking.bookingId }}
+          </small>
+
+        </div>
+
+
+        <span
+          class="status-badge"
+          [ngClass]="
+            booking.status.toLowerCase()
+          ">
+
+          {{ booking.status }}
+
+        </span>
+
+      </div>
+
+
+      <p
+        *ngIf="
+          !loading &&
+          bookings.length === 0
+        "
+        class="message">
+
+        You have no bookings yet.
+
+      </p>
+
+    </section>
+
+
+    <!-- ========================================================= -->
+    <!-- BOOKING HISTORY SECTION -->
+    <!-- ========================================================= -->
+
+    <section
+      *ngIf="activeSection === 'history'"
+      class="booking-section">
+
+
+      <div class="section-heading">
+
+        <div>
+
+          <h2>
+            My Booking History
+          </h2>
+
+          <p>
+            All your movie ticket bookings in one place.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <p
+        *ngIf="loading"
+        class="message">
+
+        Loading your bookings...
+
+      </p>
+
+
+      <p
+        *ngIf="errorMessage"
+        class="error-message">
+
+        {{ errorMessage }}
+
+      </p>
+
+
+      <p
+        *ngIf="
+          !loading &&
+          !errorMessage &&
+          bookings.length === 0
+        "
+        class="message">
+
+        You haven't made any bookings yet.
+
+      </p>
+
+
+      <div
+        class="table-wrapper"
+        *ngIf="
+          !loading &&
+          bookings.length > 0
+        ">
+
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+              <th>
+                Movie
+              </th>
+
+              <th>
+                Show Date
+              </th>
+
+              <th>
+                Show Time
+              </th>
+
+              <th>
+                Seats
+              </th>
+
+              <th>
+                Amount
+              </th>
+
+              <th>
+                Status
+              </th>
+
+              <th>
+                Booking ID
+              </th>
+
+              <th>
+                Action
+              </th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody>
+
+            <tr
+              *ngFor="
+                let booking of bookings
+              ">
+
+
+              <!-- MOVIE -->
+
+              <td>
+
+                <div class="movie-info">
+
+                  <img
+                    *ngIf="booking.moviePoster"
+                    [src]="booking.moviePoster"
+                    [alt]="booking.movieTitle"
+                    class="movie-poster">
+
+
+                  <div
+                    class="poster-placeholder"
+                    *ngIf="!booking.moviePoster">
+
+                    🎬
+
+                  </div>
+
+
+                  <strong>
+                    {{ booking.movieTitle }}
+                  </strong>
+
+                </div>
+
+              </td>
+
+
+              <!-- DATE -->
+
+              <td>
+
+                {{ booking.showDate | date:'dd MMM yyyy' }}
+
+              </td>
+
+
+              <!-- TIME -->
+
+              <td>
+
+                {{ booking.showTime }}
+
+              </td>
+
+
+              <!-- SEATS -->
+
+              <td>
+
+                <span
+                  class="seat-badge"
+                  *ngFor="
+                    let seat of booking.seatNumbers
+                  ">
+
+                  {{ seat }}
+
+                </span>
+
+              </td>
+
+
+              <!-- AMOUNT -->
+
+              <td>
+
+                ₹{{ booking.totalAmount | number:'1.2-2' }}
+
+              </td>
+
+
+              <!-- STATUS -->
+
+              <td>
+
+                <span
+                  class="status-badge"
+                  [ngClass]="
+                    booking.status.toLowerCase()
+                  ">
+
+                  {{ booking.status }}
+
+                </span>
+
+              </td>
+
+
+              <!-- BOOKING ID -->
+
+              <td>
+
+                #{{ booking.bookingId }}
+
+              </td>
+
+
+              <!-- ACTION -->
+
+              <td>
+
+                <button
+                  *ngIf="
+                    booking.status === 'CONFIRMED'
+                  "
+                  type="button"
+                  class="cancel-booking-btn"
+                  (click)="
+                    cancelBooking(booking.bookingId)
+                  ">
+
+                  Cancel Booking
+
+                </button>
+
+
+                <span
+                  *ngIf="
+                    booking.status === 'CANCELLED'
+                  ">
+
+                  Cancelled
+
+                </span>
+
+              </td>
+
+            </tr>
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </section>
+
+
+    <!-- ========================================================= -->
+    <!-- MY PROFILE SECTION -->
+    <!-- ========================================================= -->
+
+    <section
+      *ngIf="activeSection === 'profile'"
+      class="booking-section">
+
+
+      <h2>
+        My Profile
+      </h2>
+
+
+      <p>
+        Manage your customer account information.
+      </p>
+
+
+      <div class="profile-card">
+
+
+        <!-- PROFILE AVATAR -->
+
+        <div class="profile-avatar">
+
+          {{ userName.charAt(0).toUpperCase() }}
+
+        </div>
+
+
+        <!-- NAME -->
+
+        <div class="profile-detail">
+
+          <label>
+            Full Name
+          </label>
+
+
+          <input
+            *ngIf="isEditingProfile"
+            type="text"
+            [(ngModel)]="userName"
+            placeholder="Enter your name">
+
+
+          <h3
+            *ngIf="!isEditingProfile">
+
+            {{ userName }}
+
+          </h3>
+
+        </div>
+
+
+        <!-- EMAIL -->
+
+        <div class="profile-detail">
+
+          <label>
+            Email Address
+          </label>
+
+
+          <h3>
+            {{ userEmail }}
+          </h3>
+
+        </div>
+
+
+        <!-- PHONE -->
+
+        <div class="profile-detail">
+
+          <label>
+            Phone Number
+          </label>
+
+
+          <input
+            *ngIf="isEditingProfile"
+            type="tel"
+            [(ngModel)]="userPhone"
+            placeholder="Enter phone number">
+
+
+          <h3
+            *ngIf="!isEditingProfile">
+
+            {{ userPhone || 'Not provided' }}
+
+          </h3>
+
+        </div>
+
+
+        <!-- ACCOUNT TYPE -->
+
+        <div class="profile-detail">
+
+          <label>
+            Account Type
+          </label>
+
+
+          <h3>
+            Customer
+          </h3>
+
+        </div>
+
+
+        <!-- SUCCESS -->
+
+        <p
+          class="success-message"
+          *ngIf="profileMessage">
+
+          {{ profileMessage }}
+
+        </p>
+
+
+        <!-- ERROR -->
+
+        <p
+          class="error-message"
+          *ngIf="profileError">
+
+          {{ profileError }}
+
+        </p>
+
+
+        <!-- EDIT -->
+
+        <button
+          *ngIf="!isEditingProfile"
+          class="refresh-btn"
+          (click)="
+            isEditingProfile = true
+          ">
+
+          ✏️ Edit Profile
+
+        </button>
+
+
+        <!-- PROFILE ACTIONS -->
+
+        <div
+          *ngIf="isEditingProfile"
+          class="profile-actions">
+
+
+          <button
+            class="refresh-btn"
+            (click)="updateProfile()">
+
+            Save Changes
+
+          </button>
+
+
+          <button
+            class="cancel-edit-btn"
+            (click)="
+              isEditingProfile = false
+            ">
+
+            Cancel
+
+          </button>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+</div>

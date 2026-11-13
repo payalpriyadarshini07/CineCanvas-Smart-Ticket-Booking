@@ -1,0 +1,85 @@
+<div class="welcome-container">
+
+  <header class="welcome-header">
+<div class="brand-logo">
+  <div class="brand-icon">🎟</div>
+  <div class="brand-text">
+    <h2>SMART<span>TICKET</span></h2>
+    <small>YOUR CINEMA EXPERIENCE</small>
+  </div>
+</div>    <span class="system-label">BOOKING SYSTEM</span>
+  </header>
+
+  <main class="welcome-content">
+
+    <div class="welcome-heading">
+      <h1>Welcome to <span>Smart Ticket Booking</span></h1>
+      <p>Your movie experience starts here. Choose how you want to continue.</p>
+    </div>
+
+    <div class="login-cards">
+
+      <!-- Customer Login -->
+      <div class="login-card customer-card">
+        <div class="card-icon">🎟️</div>
+
+        <h2>Customer</h2>
+        <p class="card-description">
+          Discover movies, explore showtimes, book your favourite seats
+          and enjoy your movie experience.
+        </p>
+
+        <ul>
+          <li>Browse Movies</li>
+          <li>Book Movie Tickets</li>
+          <li>View Booking History</li>
+          <li>Manage Your Profile</li>
+        </ul>
+
+        <button class="login-button customer-button"
+                (click)="customerLogin()">
+          Customer Login →
+        </button>
+
+        <p class="register-text">
+          New customer?
+          <a (click)="register()">Create an Account</a>
+        </p>
+      </div>
+
+      <!-- Admin Login -->
+      <div class="login-card admin-card">
+        <div class="card-icon">🛡️</div>
+
+        <h2>Administrator</h2>
+        <p class="card-description">
+          Manage the complete ticket booking system from one central
+          administration dashboard.
+        </p>
+
+        <ul>
+          <li>Manage Movies and Theaters</li>
+          <li>Manage Screens and Shows</li>
+          <li>Manage Customer Bookings</li>
+          <li>View Registered Customers</li>
+        </ul>
+
+        <button class="login-button admin-button"
+                (click)="adminLogin()">
+          Admin Login →
+        </button>
+
+        <p class="register-text">
+          Authorized administrators only
+        </p>
+      </div>
+
+    </div>
+
+  </main>
+
+  <footer class="welcome-footer">
+    © 2026 Smart Ticket Booking System. All Rights Reserved.
+  </footer>
+
+</div>

@@ -1,0 +1,1401 @@
+<div class="app-shell">
+
+  <!-- =====================================================
+       NAVBAR
+       ===================================================== -->
+  <header class="topbar">
+
+    <div class="brand">
+      <div class="brand-icon">S</div>
+      <span>SMART<span class="brand-highlight">TICKET</span></span>
+    </div>
+
+    <div class="topbar-right">
+      <span class="secure-label">● Secure Booking</span>
+    </div>
+
+  </header>
+
+
+  <main class="main-content">
+
+    <!-- =====================================================
+         HERO SECTION
+         ===================================================== -->
+    <section class="hero">
+
+      <div class="hero-tag">
+        YOUR NEXT EXPERIENCE STARTS HERE
+      </div>
+
+      <h1>
+        Book your <span>perfect seat.</span>
+      </h1>
+
+      <p>
+        Choose your seats, secure your booking and enjoy the show.
+      </p>
+
+    </section>
+
+
+    <!-- =====================================================
+         STATUS MESSAGE
+         ===================================================== -->
+    <div
+      class="status-message"
+      [class.error]="message().toLowerCase().includes('failed')">
+
+      <span class="status-dot"></span>
+
+      {{ message() }}
+
+    </div>
+
+
+    <!-- =====================================================
+         SEAT SELECTION AND BOOKING SUMMARY
+         ===================================================== -->
+    @if (!booking()) {
+
+      <section class="booking-layout">
+
+        <!-- =================================================
+             SEAT SECTION
+             ================================================= -->
+        <div class="seat-section">
+
+          <div class="section-heading">
+
+            <div>
+
+              <span class="eyebrow">
+                SELECT YOUR SEAT
+              </span>
+
+              <h2>
+                Choose your spots
+              </h2>
+
+            </div>
+
+            <span class="seat-count">
+              {{ seats().length }} Seats
+            </span>
+
+          </div>
+
+
+          <div class="cinema">
+
+            <!-- CINEMA SCREEN -->
+            <div class="screen-area">
+
+              <div class="screen-glow"></div>
+
+              <div class="screen-shape"></div>
+
+              <span>SCREEN</span>
+
+            </div>
+
+
+            <!-- SEAT LEGEND -->
+            <div class="seat-legend">
+
+              <div>
+                <span class="legend-seat available"></span>
+                Available
+              </div>
+
+              <div>
+                <span class="legend-seat selected"></span>
+                Selected
+              </div>
+
+              <div>
+                <span class="legend-seat booked"></span>
+                Booked
+              </div>
+
+            </div>
+
+
+            <!-- SEAT GRID -->
+            <div class="seat-grid">
+
+              @for (seat of seats(); track seat.seatId) {
+
+                <button
+                  type="button"
+                  class="seat"
+
+                  [class.selected]="
+                    selectedSeats().some(
+                      selected => selected.seatId === seat.seatId
+                    )
+                  "
+
+                  [class.unavailable]="
+                    seat.status !== 'AVAILABLE'
+                  "
+
+                  [disabled]="
+                    seat.status !== 'AVAILABLE' ||
+                    isLocking() ||
+                    isCheckingOut() ||
+                    isCheckingRisk()
+                  "
+
+                  (click)="selectSeat(seat)"
+                >
+
+                  <span class="seat-number">
+                    {{ seat.seatNumber }}
+                  </span>
+
+                  <small>
+                    ₹{{ seat.price }}
+                  </small>
+
+                </button>
+
+              }
+
+            </div>
+
+
+            <p class="screen-caption">
+              ALL EYES THIS WAY
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <!-- =================================================
+             BOOKING SUMMARY
+             ================================================= -->
+        <aside class="checkout-panel">
+
+          <span class="eyebrow">
+            YOUR ORDER
+          </span>
+
+          <h2>
+            Booking summary
+          </h2>
+
+
+          @if (selectedSeats().length > 0) {
+
+            <!-- =================================================
+                 SELECTED SEATS
+                 ================================================= -->
+            <div class="selected-card">
+
+              <div>
+
+                <span class="muted-label">
+                  SELECTED SEATS
+                </span>
+
+                <h3>
+                  {{ selectedSeats().length }}
+                  seat{{ selectedSeats().length > 1 ? 's' : '' }}
+                </h3>
+
+              </div>
+
+              <span class="selected-badge">
+                SELECTED
+              </span>
+
+            </div>
+
+
+            <!-- =================================================
+                 SELECTED SEAT LIST
+                 ================================================= -->
+            <div class="selected-seat-list">
+
+              @for (
+                seat of selectedSeats();
+                track seat.seatId
+              ) {
+
+                <div class="summary-row">
+
+                  <span>
+                    {{ seat.seatNumber }}
+                    · {{ seat.seatTier }}
+                  </span>
+
+                  <strong>
+                    ₹{{ seat.price }}
+                  </strong>
+
+                </div>
+
+              }
+
+            </div>
+
+
+            <div class="summary-divider"></div>
+
+
+            <!-- =================================================
+                 TOTAL
+                 ================================================= -->
+            <div class="total-row">
+
+              <span>
+                Total amount
+              </span>
+
+              <strong>
+                ₹{{
+                  selectedSeats().reduce(
+                    (total, seat) =>
+                      total + (seat.price || 0),
+                    0
+                  )
+                }}
+              </strong>
+
+            </div>
+
+
+            <!-- =================================================
+                 AI BOOKING SECURITY RESULT
+                 ================================================= -->
+            @if (isCheckingRisk()) {
+
+              <div class="security-card">
+
+                <div class="security-header">
+
+                  <span class="security-icon">
+                    🛡️
+                  </span>
+
+                  <div>
+
+                    <span class="muted-label">
+                      AI SECURITY
+                    </span>
+
+                    <h3>
+                      Checking booking...
+                    </h3>
+
+                  </div>
+
+                </div>
+
+                <p>
+                  Our AI is analyzing the current booking
+                  conditions before payment.
+                </p>
+
+              </div>
+
+            }
+
+
+            @if (riskResult(); as risk) {
+
+              <div
+                class="security-card"
+
+                [class.security-low]="
+                  risk.risk_level === 'LOW'
+                "
+
+                [class.security-medium]="
+                  risk.risk_level === 'MEDIUM'
+                "
+
+                [class.security-high]="
+                  risk.risk_level === 'HIGH'
+                "
+              >
+
+                <!-- SECURITY HEADER -->
+                <div class="security-header">
+
+                  <span class="security-icon">
+                    🛡️
+                  </span>
+
+                  <div>
+
+                    <span class="muted-label">
+                      AI BOOKING SECURITY
+                    </span>
+
+                    <h3>
+                      {{ risk.risk_level }} RISK
+                    </h3>
+
+                  </div>
+
+                </div>
+
+
+                <!-- RISK MESSAGE -->
+                <p class="security-message">
+                  {{ risk.message }}
+                </p>
+
+
+                <!-- RISK SCORE -->
+                <div class="security-score-row">
+
+                  <span>
+                    Risk Score
+                  </span>
+
+                  <strong>
+                    {{ risk.risk_score }}/100
+                  </strong>
+
+                </div>
+
+
+                <!-- OCCUPANCY -->
+                <div class="security-detail-row">
+
+                  <span>
+                    Show occupancy
+                  </span>
+
+                  <strong>
+                    {{ risk.occupancy_percentage }}%
+                  </strong>
+
+                </div>
+
+
+                <!-- CURRENT BOOKINGS -->
+                <div class="security-detail-row">
+
+                  <span>
+                    Current bookings
+                  </span>
+
+                  <strong>
+                    {{ risk.current_bookings }}
+                  </strong>
+
+                </div>
+
+
+                <!-- AVAILABLE SEATS -->
+                <div class="security-detail-row">
+
+                  <span>
+                    Available seats
+                  </span>
+
+                  <strong>
+                    {{ risk.available_seats }}
+                  </strong>
+
+                </div>
+
+
+                <!-- SEATS REQUESTED -->
+                <div class="security-detail-row">
+
+                  <span>
+                    Seats requested
+                  </span>
+
+                  <strong>
+                    {{ risk.seats_requested }}
+                  </strong>
+
+                </div>
+
+
+                <!-- RISK FACTORS -->
+                @if (
+                  risk.risk_factors &&
+                  risk.risk_factors.length > 0
+                ) {
+
+                  <div class="risk-factors">
+
+                    <span class="muted-label">
+                      DETECTED CONDITIONS
+                    </span>
+
+                    @for (
+                      factor of risk.risk_factors;
+                      track factor
+                    ) {
+
+                      <div class="risk-factor">
+                        <span>•</span>
+                        {{ factor }}
+                      </div>
+
+                    }
+
+                  </div>
+
+                }
+
+
+                <!-- SUGGESTED ACTION -->
+                <div class="security-action">
+
+                  <strong>
+                    Recommendation
+                  </strong>
+
+                  <p>
+                    {{ risk.suggested_action }}
+                  </p>
+
+                </div>
+
+              </div>
+
+            }
+
+
+            <!-- =================================================
+                 CONTINUE TO PAYMENT
+                 ================================================= -->
+            <button
+              type="button"
+              class="primary-button"
+
+              (click)="openPaymentOptions()"
+
+              [disabled]="
+                isCheckingOut() ||
+                isCheckingRisk() ||
+                selectedSeats().length === 0
+              "
+            >
+
+              @if (isCheckingRisk()) {
+
+                Checking Security...
+
+              } @else {
+
+                Continue to Payment
+                <span>→</span>
+
+              }
+
+            </button>
+
+
+            <!-- =================================================
+                 RELEASE SEATS
+                 ================================================= -->
+            <button
+              type="button"
+              class="release-button"
+
+              (click)="releaseSeat()"
+
+              [disabled]="
+                isCheckingOut() ||
+                isCheckingRisk() ||
+                selectedSeats().length === 0
+              "
+            >
+
+              Release Selected Seats
+
+            </button>
+
+          } @else {
+
+            <!-- =================================================
+                 NO SEAT SELECTED
+                 ================================================= -->
+            <div class="empty-selection">
+
+              <div class="empty-icon">
+                ✦
+              </div>
+
+              <h3>
+                No seats selected
+              </h3>
+
+              <p>
+                Select available seats to see your
+                booking summary.
+              </p>
+
+            </div>
+
+          }
+
+
+          <!-- SECURE NOTE -->
+          <div class="secure-note">
+
+            <span>✓</span>
+
+            <p>
+              Secure seat reservation with temporary locking.
+            </p>
+
+          </div>
+
+
+          <p class="test-note">
+            Secure payment powered by Razorpay Test Mode.
+            No real money will be charged.
+          </p>
+
+        </aside>
+
+      </section>
+
+    }
+
+
+    <!-- =====================================================
+         PAYMENT METHOD MODAL
+         ===================================================== -->
+    @if (paymentOptionsOpen()) {
+
+      <div class="payment-overlay">
+
+        <div class="payment-modal">
+
+          <!-- CLOSE BUTTON -->
+          <button
+            type="button"
+            class="close-payment"
+
+            (click)="closePaymentOptions()"
+          >
+
+            ✕
+
+          </button>
+
+
+          <span class="eyebrow">
+            SECURE CHECKOUT
+          </span>
+
+          <h2>
+            Choose Payment Method
+          </h2>
+
+          <p class="payment-description">
+            Select your preferred payment option.
+          </p>
+
+
+          <!-- =================================================
+               AI SECURITY SUMMARY INSIDE PAYMENT MODAL
+               ================================================= -->
+          @if (riskResult(); as risk) {
+
+            <div
+              class="payment-security-summary"
+
+              [class.security-low]="
+                risk.risk_level === 'LOW'
+              "
+
+              [class.security-medium]="
+                risk.risk_level === 'MEDIUM'
+              "
+
+              [class.security-high]="
+                risk.risk_level === 'HIGH'
+              "
+            >
+
+              <span class="security-icon">
+                🛡️
+              </span>
+
+              <div>
+
+                <strong>
+                  Booking Security:
+                  {{ risk.risk_level }}
+                </strong>
+
+                <small>
+                  {{ risk.message }}
+                </small>
+
+              </div>
+
+            </div>
+
+          }
+
+
+          <!-- =================================================
+               PAYMENT AMOUNT
+               ================================================= -->
+          <div class="payment-amount">
+
+            <span>
+              AMOUNT TO PAY
+            </span>
+
+           @if (selectedSeats().length > 0) {
+
+  <strong>
+    ₹{{ getSelectedSeatsTotal() }}
+  </strong>
+
+}
+
+          </div>
+
+
+         <!-- =================================================
+     PAYMENT METHODS
+     ================================================= -->
+<div
+  class="payment-methods"
+  style="
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    margin-top: 18px;
+  "
+>
+
+  <!-- GOOGLE PAY -->
+  <button
+    type="button"
+    class="payment-option"
+
+    [class.active]="
+      selectedPaymentMethod() === 'GOOGLE_PAY'
+    "
+
+    (click)="
+      choosePaymentMethod('GOOGLE_PAY')
+    "
+
+    style="
+      display: flex !important;
+      align-items: center !important;
+      width: 100% !important;
+      height: 64px !important;
+      padding: 10px 16px !important;
+      background: #1d1a27 !important;
+      border: 1px solid #4a4057 !important;
+      border-radius: 12px !important;
+      color: white !important;
+      text-align: left !important;
+      cursor: pointer !important;
+    "
+  >
+
+    <span
+      style="
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 40px !important;
+        height: 40px !important;
+        margin-right: 14px !important;
+        background: #4b286b !important;
+        border-radius: 9px !important;
+        color: white !important;
+        font-size: 18px !important;
+        font-weight: 700 !important;
+      "
+    >
+      G
+    </span>
+
+    <span
+      style="
+        display: block !important;
+        flex: 1 !important;
+        color: white !important;
+        font-size: 15px !important;
+        font-weight: 600 !important;
+      "
+    >
+      Google Pay
+    </span>
+
+    <span
+      style="
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 22px !important;
+        height: 22px !important;
+        border: 1px solid #aaa !important;
+        border-radius: 50% !important;
+        color: white !important;
+      "
+    >
+      @if (selectedPaymentMethod() === 'GOOGLE_PAY') {
+        ✓
+      }
+    </span>
+
+  </button>
+
+
+  <!-- PHONEPE -->
+  <button
+    type="button"
+    class="payment-option"
+
+    [class.active]="
+      selectedPaymentMethod() === 'PHONEPE'
+    "
+
+    (click)="
+      choosePaymentMethod('PHONEPE')
+    "
+
+    style="
+      display: flex !important;
+      align-items: center !important;
+      width: 100% !important;
+      height: 64px !important;
+      padding: 10px 16px !important;
+      background: #1d1a27 !important;
+      border: 1px solid #4a4057 !important;
+      border-radius: 12px !important;
+      color: white !important;
+      text-align: left !important;
+      cursor: pointer !important;
+    "
+  >
+
+    <span
+      style="
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 40px !important;
+        height: 40px !important;
+        margin-right: 14px !important;
+        background: #4b286b !important;
+        border-radius: 9px !important;
+        color: white !important;
+        font-size: 18px !important;
+        font-weight: 700 !important;
+      "
+    >
+      P
+    </span>
+
+    <span
+      style="
+        display: block !important;
+        flex: 1 !important;
+        color: white !important;
+        font-size: 15px !important;
+        font-weight: 600 !important;
+      "
+    >
+      PhonePe
+    </span>
+
+    <span
+      style="
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 22px !important;
+        height: 22px !important;
+        border: 1px solid #aaa !important;
+        border-radius: 50% !important;
+        color: white !important;
+      "
+    >
+      @if (selectedPaymentMethod() === 'PHONEPE') {
+        ✓
+      }
+    </span>
+
+  </button>
+
+
+  <!-- PAYTM -->
+  <button
+    type="button"
+    class="payment-option"
+
+    [class.active]="
+      selectedPaymentMethod() === 'PAYTM'
+    "
+
+    (click)="
+      choosePaymentMethod('PAYTM')
+    "
+
+    style="
+      display: flex !important;
+      align-items: center !important;
+      width: 100% !important;
+      height: 64px !important;
+      padding: 10px 16px !important;
+      background: #1d1a27 !important;
+      border: 1px solid #4a4057 !important;
+      border-radius: 12px !important;
+      color: white !important;
+      text-align: left !important;
+      cursor: pointer !important;
+    "
+  >
+
+    <span
+      style="
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 40px !important;
+        height: 40px !important;
+        margin-right: 14px !important;
+        background: #4b286b !important;
+        border-radius: 9px !important;
+        color: white !important;
+        font-size: 18px !important;
+        font-weight: 700 !important;
+      "
+    >
+      ₹
+    </span>
+
+    <span
+      style="
+        display: block !important;
+        flex: 1 !important;
+        color: white !important;
+        font-size: 15px !important;
+        font-weight: 600 !important;
+      "
+    >
+      Paytm
+    </span>
+
+    <span
+      style="
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 22px !important;
+        height: 22px !important;
+        border: 1px solid #aaa !important;
+        border-radius: 50% !important;
+        color: white !important;
+      "
+    >
+      @if (selectedPaymentMethod() === 'PAYTM') {
+        ✓
+      }
+    </span>
+
+  </button>
+
+
+  <!-- UPI -->
+  <button
+    type="button"
+    class="payment-option"
+
+    [class.active]="
+      selectedPaymentMethod() === 'UPI'
+    "
+
+    (click)="
+      choosePaymentMethod('UPI')
+    "
+
+    style="
+      display: flex !important;
+      align-items: center !important;
+      width: 100% !important;
+      height: 64px !important;
+      padding: 10px 16px !important;
+      background: #1d1a27 !important;
+      border: 1px solid #4a4057 !important;
+      border-radius: 12px !important;
+      color: white !important;
+      text-align: left !important;
+      cursor: pointer !important;
+    "
+  >
+
+    <span
+      style="
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 40px !important;
+        height: 40px !important;
+        margin-right: 14px !important;
+        background: #4b286b !important;
+        border-radius: 9px !important;
+        color: white !important;
+        font-size: 18px !important;
+        font-weight: 700 !important;
+      "
+    >
+      ▦
+    </span>
+
+    <span
+      style="
+        display: block !important;
+        flex: 1 !important;
+        color: white !important;
+        font-size: 15px !important;
+        font-weight: 600 !important;
+      "
+    >
+      UPI
+    </span>
+
+    <span
+      style="
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 22px !important;
+        height: 22px !important;
+        border: 1px solid #aaa !important;
+        border-radius: 50% !important;
+        color: white !important;
+      "
+    >
+      @if (selectedPaymentMethod() === 'UPI') {
+        ✓
+      }
+    </span>
+
+  </button>
+
+
+  <!-- DEBIT / CREDIT CARD -->
+  <button
+    type="button"
+    class="payment-option"
+
+    [class.active]="
+      selectedPaymentMethod() === 'CARD'
+    "
+
+    (click)="
+      choosePaymentMethod('CARD')
+    "
+
+    style="
+      display: flex !important;
+      align-items: center !important;
+      width: 100% !important;
+      height: 64px !important;
+      padding: 10px 16px !important;
+      background: #1d1a27 !important;
+      border: 1px solid #4a4057 !important;
+      border-radius: 12px !important;
+      color: white !important;
+      text-align: left !important;
+      cursor: pointer !important;
+    "
+  >
+
+    <span
+      style="
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 40px !important;
+        height: 40px !important;
+        margin-right: 14px !important;
+        background: #4b286b !important;
+        border-radius: 9px !important;
+        color: white !important;
+        font-size: 18px !important;
+        font-weight: 700 !important;
+      "
+    >
+      ▣
+    </span>
+
+    <span
+      style="
+        display: block !important;
+        flex: 1 !important;
+        color: white !important;
+        font-size: 15px !important;
+        font-weight: 600 !important;
+      "
+    >
+      Debit / Credit Card
+    </span>
+
+    <span
+      style="
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 22px !important;
+        height: 22px !important;
+        border: 1px solid #aaa !important;
+        border-radius: 50% !important;
+        color: white !important;
+      "
+    >
+      @if (selectedPaymentMethod() === 'CARD') {
+        ✓
+      }
+    </span>
+
+  </button>
+
+</div>
+          <!-- =================================================
+               UPI QR DEMO
+               ================================================= -->
+          @if (
+            selectedPaymentMethod() === 'UPI'
+          ) {
+
+            <div class="qr-demo">
+
+              <div class="qr-placeholder">
+                DEMO
+              </div>
+
+              <strong>
+                UPI QR Payment
+              </strong>
+
+              <p>
+                Complete your UPI payment securely
+                through Razorpay Checkout.
+              </p>
+
+            </div>
+
+          }
+
+
+          <!-- =================================================
+               CARD DEMO
+               ================================================= -->
+          @if (
+            selectedPaymentMethod() === 'CARD'
+          ) {
+
+            <div class="card-demo">
+
+              <strong>
+                Card Payment
+              </strong>
+
+              <p>
+                Complete your card payment securely
+                through Razorpay Checkout.
+              </p>
+
+              <small>
+                Do not enter real card details
+                in development mode.
+              </small>
+
+            </div>
+
+          }
+
+
+          <!-- =================================================
+               GOOGLE PAY / PHONEPE / PAYTM
+               ================================================= -->
+          @if (
+            selectedPaymentMethod() === 'GOOGLE_PAY' ||
+            selectedPaymentMethod() === 'PHONEPE' ||
+            selectedPaymentMethod() === 'PAYTM'
+          ) {
+
+            <div class="upi-demo">
+
+              <strong>
+
+                {{
+                  selectedPaymentMethod() === 'GOOGLE_PAY'
+                    ? 'Google Pay'
+                    : selectedPaymentMethod() === 'PHONEPE'
+                      ? 'PhonePe'
+                      : 'Paytm'
+                }}
+
+              </strong>
+
+              <p>
+                Complete your payment securely
+                through Razorpay Checkout.
+              </p>
+
+            </div>
+
+          }
+
+
+          <!-- =================================================
+               CONTINUE PAYMENT
+               ================================================= -->
+          <button
+            type="button"
+            class="primary-button pay-now"
+
+            (click)="checkout()"
+
+            [disabled]="
+              !selectedPaymentMethod() ||
+              isCheckingOut() ||
+              !riskResult()
+            "
+          >
+
+            @if (isCheckingOut()) {
+
+              Processing...
+
+            } @else {
+
+              Pay Securely with Razorpay →
+
+            }
+
+          </button>
+
+
+          <p class="demo-warning">
+            Razorpay Test Mode:
+            No real money will be charged.
+          </p>
+
+        </div>
+
+      </div>
+
+    }
+
+
+    <!-- =====================================================
+         BOOKING CONFIRMATION
+         ===================================================== -->
+    @if (booking(); as bookingDetails) {
+
+      @if (
+        bookingDetails.status === 'CONFIRMED'
+      ) {
+
+        <section class="confirmation">
+
+          <div class="success-icon">
+            ✓
+          </div>
+
+          <span class="eyebrow">
+            BOOKING SUMMARY
+          </span>
+
+          <h2>
+            Your booking details
+          </h2>
+
+          <p class="confirmation-subtitle">
+            Your booking and payment information
+            is shown below.
+          </p>
+
+
+          <!-- =================================================
+               BOOKING INFORMATION
+               ================================================= -->
+          <div class="confirmation-details">
+
+            <div>
+
+              <span>
+                BOOKING ID
+              </span>
+
+              <strong>
+                #{{ bookingDetails.bookingId }}
+              </strong>
+
+            </div>
+
+
+            <div>
+
+              <span>
+                SEATS
+              </span>
+
+              <strong>
+                @if (confirmedSeatNumbers().length > 0) {
+
+                  {{ confirmedSeatNumbers().join(', ') }}
+
+                } @else {
+
+                  N/A
+
+                }
+              </strong>
+
+            </div>
+
+
+            <div>
+
+              <span>
+                TOTAL AMOUNT
+              </span>
+
+              <strong>
+                ₹{{ bookingDetails.totalAmount }}
+              </strong>
+
+            </div>
+
+
+            <div>
+
+              <span>
+                BOOKING STATUS
+              </span>
+
+              <strong>
+                {{ bookingDetails.status }}
+              </strong>
+
+            </div>
+
+          </div>
+
+
+          <!-- =================================================
+               PAYMENT INFORMATION
+               ================================================= -->
+          @if (payment(); as paymentDetails) {
+
+            <h3 class="payment-heading">
+              Payment details
+            </h3>
+
+            <div class="confirmation-details">
+
+              <div>
+
+                <span>
+                  PAYMENT ID
+                </span>
+
+                <strong>
+                  {{ paymentDetails.paymentId }}
+                </strong>
+
+              </div>
+
+
+              <div>
+
+                <span>
+                  PAYMENT STATUS
+                </span>
+
+                <strong>
+                  {{ paymentDetails.status }}
+                </strong>
+
+              </div>
+
+
+              <div>
+
+                <span>
+                  PAYMENT METHOD
+                </span>
+
+                <strong>
+                  {{ paymentDetails.paymentMethod }}
+                </strong>
+
+              </div>
+
+            </div>
+
+          }
+
+
+          <!-- =================================================
+               BOOK ANOTHER SEAT
+               ================================================= -->
+          <button
+            type="button"
+            class="primary-button another-booking"
+
+            (click)="startAnotherBooking()"
+
+            [disabled]="isCheckingOut()"
+          >
+
+            Book another seat →
+
+          </button>
+
+
+          <a
+            href="http://localhost:4202/user-dashboard?userId=2"
+            class="back-button"
+          >
+
+            Return to My Dashboard →
+
+          </a>
+
+        </section>
+
+      }
+
+    }
+
+  </main>
+
+
+  <!-- =====================================================
+       FOOTER
+       ===================================================== -->
+  <footer class="footer">
+
+    <span>
+      © SmartTicket
+    </span>
+
+    <span>
+      MADE FOR BETTER EXPERIENCES
+    </span>
+
+  </footer>
+
+</div>

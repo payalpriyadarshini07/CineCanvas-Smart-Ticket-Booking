@@ -1,0 +1,275 @@
+﻿<div class="ai-page">
+
+  <header class="page-header">
+    <span class="eyebrow">ARTIFICIAL INTELLIGENCE</span>
+    <h1>SmartTix AI Intelligence</h1>
+    <p>
+      Intelligent recommendations, demand forecasting and booking security.
+    </p>
+  </header>
+
+  <section class="ai-grid">
+
+    <!-- RECOMMENDATIONS -->
+    <article class="ai-card">
+
+      <div class="ai-icon">AI</div>
+
+      <span class="tag">RECOMMENDATION</span>
+      <h2>Movie Recommendations</h2>
+
+      <p class="description">
+        Discover movies based on your favorite genres and preferences.
+      </p>
+
+      <div class="input-area">
+        <label>Favorite Genres</label>
+
+        <div class="genre-list">
+          <button
+            type="button"
+            class="genre-button"
+            *ngFor="let genre of availableGenres"
+            [class.selected]="isGenreSelected(genre)"
+            (click)="toggleGenre(genre)">
+            {{ genre }}
+          </button>
+        </div>
+      </div>
+
+      <button
+        type="button"
+        class="primary-button"
+        (click)="runRecommendations()"
+        [disabled]="recommendationLoading">
+
+        {{ recommendationLoading
+          ? 'Generating...'
+          : 'Generate Recommendations' }}
+      </button>
+
+      <div class="status">
+        {{ recommendationMessage }}
+      </div>
+
+      <div
+        class="result-panel"
+        *ngIf="!recommendationLoading && recommendations.length">
+
+        <div class="result-title">
+          Recommended For You
+        </div>
+
+        <div class="recommendation-list">
+
+          <div
+            class="recommendation-item"
+            *ngFor="let movie of recommendations">
+
+            <div class="movie-info">
+              <strong>{{ movie.title }}</strong>
+              <span>{{ movie.genre }}</span>
+            </div>
+
+            <span class="popularity">
+              Popularity {{ movie.popularity }}
+            </span>
+
+          </div>
+
+        </div>
+      </div>
+
+    </article>
+
+
+    <!-- DEMAND -->
+    <article class="ai-card">
+
+      <div class="ai-icon">DP</div>
+
+      <span class="tag">FORECASTING</span>
+      <h2>Demand Prediction</h2>
+
+      <p class="description">
+        Predict upcoming show demand using current bookings, seat capacity
+        and time remaining before the show.
+      </p>
+
+      <div class="input-grid">
+
+        <div class="input-area">
+          <label for="showId">Show ID</label>
+          <input
+            id="showId"
+            type="number"
+            min="1"
+            [(ngModel)]="showId">
+        </div>
+
+        <div class="input-area">
+          <label for="currentBookings">Current Bookings</label>
+          <input
+            id="currentBookings"
+            type="number"
+            min="0"
+            [(ngModel)]="currentBookings">
+        </div>
+
+        <div class="input-area">
+          <label for="totalSeats">Total Seats</label>
+          <input
+            id="totalSeats"
+            type="number"
+            min="1"
+            [(ngModel)]="totalSeats">
+        </div>
+
+        <div class="input-area">
+          <label for="hoursUntilShow">Hours Until Show</label>
+          <input
+            id="hoursUntilShow"
+            type="number"
+            min="0"
+            step="0.5"
+            [(ngModel)]="hoursUntilShow">
+        </div>
+
+      </div>
+
+      <button
+        type="button"
+        class="primary-button"
+        (click)="runDemandPrediction()"
+        [disabled]="demandLoading">
+
+        {{ demandLoading
+          ? 'Predicting...'
+          : 'Predict Demand' }}
+      </button>
+
+      <div class="status">
+        {{ demandMessage }}
+      </div>
+
+      <div
+        class="result-panel"
+        *ngIf="!demandLoading && demandResult">
+
+        <div class="result-title">
+          Demand Analysis
+        </div>
+
+        <div class="metric-grid">
+
+          <div class="metric">
+            <span>Current Bookings</span>
+            <strong>{{ demandResult.current_bookings }}</strong>
+          </div>
+
+          <div class="metric">
+            <span>Predicted Total</span>
+            <strong>{{ demandResult.predicted_total_bookings }}</strong>
+          </div>
+
+          <div class="metric">
+            <span>Predicted Occupancy</span>
+            <strong>
+              {{ demandResult.predicted_occupancy_percentage }}%
+            </strong>
+          </div>
+
+          <div class="metric">
+            <span>Demand Level</span>
+            <strong class="demand-level">
+              {{ demandResult.demand_level }}
+            </strong>
+          </div>
+
+        </div>
+
+        <div class="model-note">
+          Model: {{ demandResult.model_type }}
+        </div>
+
+      </div>
+
+    </article>
+
+
+    <!-- FRAUD -->
+    <article class="ai-card">
+
+      <div class="ai-icon">SEC</div>
+
+      <span class="tag">SECURITY</span>
+      <h2>Fraud Detection</h2>
+
+      <p class="description">
+        Check a booking for suspicious activity and potential security risk.
+      </p>
+
+      <div class="input-area">
+        <label for="bookingId">Booking ID</label>
+
+        <input
+          id="bookingId"
+          type="number"
+          min="1"
+          [(ngModel)]="bookingId">
+      </div>
+
+      <button
+        type="button"
+        class="primary-button"
+        (click)="runFraudDetection()"
+        [disabled]="fraudLoading">
+
+        {{ fraudLoading
+          ? 'Analyzing...'
+          : 'Analyze Booking Risk' }}
+      </button>
+
+      <div class="status">
+        {{ fraudMessage }}
+      </div>
+
+      <div
+        class="result-panel"
+        *ngIf="!fraudLoading && fraudResult">
+
+        <div class="result-title">
+          Security Analysis
+        </div>
+
+        <div class="metric-grid">
+
+          <div class="metric">
+            <span>Risk Score</span>
+            <strong>{{ fraudResult.risk_score }}</strong>
+          </div>
+
+          <div class="metric">
+            <span>Risk Level</span>
+            <strong>{{ fraudResult.risk_level }}</strong>
+          </div>
+        </div>
+
+        <div class="security-action">
+          <span>Recommended Action</span>
+          <strong>
+            {{ fraudResult.suggested_action }}
+          </strong>
+        </div>
+
+        <div class="model-note">
+          Model: {{ fraudResult.model_type }}
+        </div>
+
+      </div>
+
+    </article>
+
+  </section>
+
+</div>

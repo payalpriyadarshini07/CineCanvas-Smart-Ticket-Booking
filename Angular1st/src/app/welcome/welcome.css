@@ -1,0 +1,300 @@
+:host {
+  display: block;
+  min-height: 100vh;
+}
+.welcome-container {
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 15% 25%, rgba(124, 58, 237, 0.25), transparent 40%),
+    radial-gradient(ellipse at 85% 35%, rgba(8, 145, 178, 0.20), transparent 40%),
+    linear-gradient(135deg, #050711 0%, #101329 50%, #180d2b 100%);
+  color: #ffffff;
+  font-family: 'Segoe UI', sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+.welcome-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.08), transparent 55%),
+    linear-gradient(transparent 70%, rgba(0,0,0,0.5));
+}
+
+.welcome-header,
+.welcome-content,
+.welcome-footer {
+  position: relative;
+  z-index: 1;
+}
+
+/* Professional brand logo */
+
+.brand-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-icon {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 13px;
+  background: linear-gradient(135deg, #7c3aed, #06b6d4);
+  font-size: 27px;
+  box-shadow: 0 0 25px rgba(124, 58, 237, 0.4);
+}
+
+.brand-text h2 {
+  font-size: 23px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  margin: 0;
+}
+
+.brand-text h2 span {
+  color: #a78bfa;
+}
+
+.brand-text small {
+  display: block;
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: #9ca3af;
+  margin-top: 3px;
+}
+
+/* Cinematic spotlight effects */
+
+.login-card {
+  backdrop-filter: blur(15px);
+  box-shadow: 0 15px 50px rgba(0,0,0,0.3);
+}
+
+.customer-card:hover {
+  box-shadow: 0 15px 45px rgba(124,58,237,0.25);
+}
+
+.admin-card:hover {
+  box-shadow: 0 15px 45px rgba(6,182,212,0.20);
+}
+
+.welcome-header {
+  height: 80px;
+  padding: 0 7%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.logo {
+  font-size: 25px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #ffffff;
+}
+
+.system-label {
+  color: #b9a7ff;
+  font-size: 12px;
+  letter-spacing: 3px;
+}
+
+.welcome-content {
+  flex: 1;
+  padding: 65px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.welcome-heading {
+  text-align: center;
+  margin-bottom: 55px;
+}
+
+.welcome-heading h1 {
+  font-size: 42px;
+  font-weight: 800;
+  margin-bottom: 15px;
+}
+
+.welcome-heading h1 span {
+  color: #a78bfa;
+}
+
+.welcome-heading p {
+  color: #b9bdd0;
+  font-size: 16px;
+}
+
+.login-cards {
+  width: 100%;
+  max-width: 950px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+}
+
+.login-card {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 20px;
+  padding: 35px;
+  transition: 0.3s ease;
+}
+
+.login-card:hover {
+  transform: translateY(-8px);
+  background: rgba(255,255,255,0.1);
+  border-color: #a78bfa;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+}
+
+.card-icon {
+  font-size: 48px;
+  margin-bottom: 15px;
+}
+
+.login-card h2 {
+  font-size: 27px;
+  margin-bottom: 12px;
+}
+
+.card-description {
+  color: #b9bdd0;
+  line-height: 1.7;
+  min-height: 80px;
+}
+
+.login-card ul {
+  padding-left: 20px;
+  margin: 25px 0;
+  color: #e0e2ef;
+  line-height: 2.2;
+}
+
+.login-button {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.customer-button {
+  background: linear-gradient(90deg, #7c3aed, #a78bfa);
+  color: white;
+}
+
+.admin-button {
+  background: linear-gradient(90deg, #0891b2, #22d3ee);
+  color: #071421;
+}
+
+.login-button:hover {
+  filter: brightness(1.15);
+  transform: scale(1.02);
+}
+
+.register-text {
+  text-align: center;
+  margin-top: 22px;
+  color: #aeb3c8;
+  font-size: 13px;
+}
+
+.register-text a {
+  color: #c4b5fd;
+  cursor: pointer;
+  font-weight: 700;
+  margin-left: 5px;
+}
+
+.welcome-footer {
+  text-align: center;
+  padding: 22px;
+  color: #858ba3;
+  font-size: 13px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+@media (max-width: 700px) {
+  .login-cards {
+    grid-template-columns: 1fr;
+    max-width: 450px;
+  }
+
+  .welcome-heading h1 {
+    font-size: 30px;
+  }
+
+  .welcome-header {
+    padding: 0 20px;
+  }
+
+  .logo {
+    font-size: 19px;
+  }
+
+  .system-label {
+    font-size: 9px;
+  }
+}
+/* Cinematic animated lighting */
+.welcome-container::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -30%;
+  width: 70%;
+  height: 150%;
+  background: linear-gradient(
+    115deg,
+    transparent,
+    rgba(167, 139, 250, 0.07),
+    transparent
+  );
+  transform: rotate(20deg);
+  animation: spotlight 9s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes spotlight {
+  from {
+    left: -30%;
+  }
+  to {
+    left: 70%;
+  }
+}
+
+/* Smooth card animations */
+.login-card {
+  transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.login-card:hover {
+  transform: translateY(-10px);
+}
+
+/* Button glow */
+.customer-button:hover {
+  box-shadow: 0 0 25px rgba(167, 139, 250, 0.5);
+}
+
+.admin-button:hover {
+  box-shadow: 0 0 25px rgba(34, 211, 238, 0.4);
+}

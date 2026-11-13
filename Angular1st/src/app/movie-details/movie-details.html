@@ -1,0 +1,78 @@
+
+<div class="details-page">
+
+  <!-- Loading State -->
+  @if (loading) {
+    <div class="status-message">
+      Loading movie details...
+    </div>
+  }
+
+  <!-- Error State -->
+  @else if (errorMessage) {
+    <div class="error-message">
+      <h2>Unable to Load Movie</h2>
+      <p>{{ errorMessage }}</p>
+
+      <a routerLink="/movies" class="back-button">
+        ← Back to Movies
+      </a>
+    </div>
+  }
+
+  <!-- Movie Details -->
+  @else if (movie) {
+    <main class="details-container">
+
+      <!-- Poster -->
+      <div class="poster-section">
+        <img
+          [src]="movie.posterUrl"
+          [alt]="movie.title + ' poster'"
+          class="movie-poster"
+        />
+      </div>
+
+      <!-- Information -->
+      <section class="movie-info">
+        <p class="section-label">MOVIE DETAILS</p>
+
+        <h1>{{ movie.title }}</h1>
+
+        <div class="movie-meta">
+          <span>{{ movie.genre }}</span>
+          <span>{{ movie.language }}</span>
+          <span>{{ movie.duration }} min</span>
+        </div>
+
+        <div class="release-date">
+          <strong>Release Date</strong>
+          <span>{{ movie.releaseDate || 'Not available' }}</span>
+        </div>
+
+        <div class="description-section">
+          <h2>About the Movie</h2>
+          <p>
+            {{ movie.description || 'No description available for this movie.' }}
+          </p>
+        </div>
+
+        <!-- Actions -->
+        <div class="details-actions">
+          <a routerLink="/movies" class="back-button">
+            ← Back to Movies
+          </a>
+
+          <a
+            [routerLink]="['/movies', movie.id, 'shows']"
+            class="view-shows-button"
+          >
+            View Shows →
+          </a>
+        </div>
+      </section>
+
+    </main>
+  }
+
+</div>

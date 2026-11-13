@@ -1,0 +1,164 @@
+<div class="auth-layout">
+
+  <!-- LEFT SIDE: REGISTRATION FORM -->
+  <section class="form-side register-side">
+
+    <a routerLink="/movies" class="brand">
+      <span class="brand-icon">S</span>
+      SMART<span class="highlight">TICKET</span>
+    </a>
+
+    <div class="form-container">
+
+      <div class="form-heading">
+        <span class="eyebrow">JOIN SMARTTICKET</span>
+        <h1>Create your account</h1>
+        <p>Join us and make every movie experience special.</p>
+      </div>
+
+      <form #registerForm="ngForm" (ngSubmit)="register()">
+
+        <div class="input-group">
+          <label>Full Name</label>
+          <input
+            type="text"
+            name="name"
+            [(ngModel)]="name"
+            placeholder="Enter your full name"
+            required
+          />
+        </div>
+
+        <div class="input-group">
+          <label>Email Address</label>
+          <input
+            type="email"
+            name="email"
+            [(ngModel)]="email"
+            placeholder="name@example.com"
+            required
+            email
+          />
+        </div>
+
+        <div class="input-group">
+          <label>Phone Number</label>
+          <input
+            type="tel"
+            name="phone"
+            [(ngModel)]="phone"
+            placeholder="Enter your phone number"
+            required
+          />
+        </div>
+
+        <div class="input-group">
+          <label>Password</label>
+          <input
+            type="password"
+            name="password"
+            [(ngModel)]="password"
+            placeholder="Create a password"
+            minlength="6"
+            required
+          />
+        </div>
+
+        <div class="input-group">
+          <label>Confirm Password</label>
+          <input
+            type="password"
+            name="confirmPassword"
+            [(ngModel)]="confirmPassword"
+            placeholder="Confirm your password"
+            required
+          />
+        </div>
+
+        <p class="message" *ngIf="message">
+          {{ message }}
+        </p>
+
+        <button
+          type="submit"
+          class="submit-button"
+          [disabled]="registerForm.invalid">
+          Create Account →
+        </button>
+
+      </form>
+
+      <div class="switch-link">
+        Already have an account?
+        <a routerLink="/login">Sign In</a>
+      </div>
+
+    </div>
+
+    <p class="copyright">© 2026 SmartTicket. All rights reserved.</p>
+
+  </section>
+
+
+  <!-- RIGHT SIDE: WELCOME MESSAGE -->
+  <section class="welcome-side">
+
+    <div class="welcome-overlay"></div>
+
+    <div class="welcome-content">
+
+      <span class="welcome-tag">WELCOME TO SMARTTICKET</span>
+
+      <h1>
+        Your next<br>
+        favourite movie<br>
+        is <span>waiting for you.</span>
+      </h1>
+
+      <p>
+        Create your account and unlock a world of entertainment.
+        Find movies, book your seats, and make memories.
+      </p>
+
+      <div class="feature-list">
+
+        <div class="feature">
+          <span>🎬</span>
+          <div>
+            <strong>Discover Movies</strong>
+            <small>Explore movies across different genres.</small>
+          </div>
+        </div>
+
+        <div class="feature">
+          <span>🎟️</span>
+          <div>
+            <strong>Simple Reservations</strong>
+            <small>Choose your showtime and favourite seat.</small>
+          </div>
+        </div>
+
+        <div class="feature">
+          <span>✦</span>
+          <div>
+            <strong>Enjoy Every Moment</strong>
+            <small>Your entertainment journey starts here.</small>
+          </div>
+        </div>
+
+      </div>
+
+      <a routerLink="/movies" class="explore-link">
+        Browse Movies →
+      </a>
+
+    </div>
+
+    <div class="decorative-circle circle-one"></div>
+    <div class="decorative-circle circle-two"></div>
+
+    <span class="side-footer">MADE FOR BETTER MOVIE EXPERIENCES</span>
+
+  </section>
+
+</div>

@@ -1,0 +1,69 @@
+.analytics-page {
+  padding: 24px;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.page-header h1 {
+  margin: 0;
+}
+
+.page-header p {
+  margin-top: 6px;
+  opacity: 0.7;
+}
+
+button {
+  padding: 10px 18px;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+}
+
+.stat-card {
+  padding: 22px;
+  border-radius: 12px;
+  background: #151b2b;
+  color: #ffffff;
+}
+
+.stat-card span {
+  display: block;
+  margin-bottom: 10px;
+  opacity: 0.7;
+}
+
+.stat-card strong {
+  font-size: 28px;
+}
+
+.revenue {
+  grid-column: span 2;
+}
+
+.state,
+.error {
+  padding: 20px;
+}
+
+.error {
+  color: #b00020;
+}
+
+@media (max-width: 600px) {
+  .revenue {
+    grid-column: span 1;
+  }
+}
+

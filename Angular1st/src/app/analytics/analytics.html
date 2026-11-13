@@ -1,0 +1,54 @@
+<div class="analytics-page">
+
+  <div class="page-header">
+    <div>
+      <h1>SmartTix Analytics</h1>
+      <p>Booking and revenue performance overview</p>
+    </div>
+
+    <button type="button" (click)="loadAnalytics()">Refresh</button>
+  </div>
+
+  <div *ngIf="loading">
+    Loading analytics...
+  </div>
+
+  <div *ngIf="!loading && error">
+    {{ error }}
+  </div>
+
+  <div *ngIf="!loading && summary">
+
+    <div class="stats-grid">
+
+      <div class="stat-card">
+        <span>Total Bookings</span>
+        <strong>{{ summary.totalBookings }}</strong>
+      </div>
+
+      <div class="stat-card">
+        <span>Confirmed</span>
+        <strong>{{ summary.confirmedBookings }}</strong>
+      </div>
+
+      <div class="stat-card">
+        <span>Cancelled</span>
+        <strong>{{ summary.cancelledBookings }}</strong>
+      </div>
+
+      <div class="stat-card">
+        <span>Failed</span>
+        <strong>{{ summary.failedBookings }}</strong>
+      </div>
+
+      <div class="stat-card revenue">
+        <span>Total Revenue</span>
+        <strong>&#8377;{{ summary.totalRevenue }}</strong>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+

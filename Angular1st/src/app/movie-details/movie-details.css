@@ -1,0 +1,304 @@
+:host {
+display: block;
+min-height: 100vh;
+}
+
+.details-page {
+min-height: 100vh;
+display: flex;
+flex-direction: column;
+background: #0b0f19;
+color: #ffffff;
+}
+
+/* Navigation */
+.details-header {
+min-height: 70px;
+padding: 0 50px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 25px;
+background: #101522;
+border-bottom: 1px solid #242938;
+}
+
+.brand {
+color: #ffffff;
+font-size: 22px;
+font-weight: 700;
+text-decoration: none;
+white-space: nowrap;
+}
+
+.details-header nav {
+display: flex;
+align-items: center;
+gap: 30px;
+}
+
+.details-header nav a {
+color: #c8ccd6;
+font-size: 14px;
+text-decoration: none;
+transition: color 0.2s ease;
+}
+
+.details-header nav a:hover,
+.details-header nav a.active {
+color: #ff6248;
+}
+
+/* Main Movie Layout */
+.details-container {
+width: min(1100px, 100%);
+margin: 0 auto;
+padding: 65px 25px;
+flex: 1;
+display: grid;
+grid-template-columns: 350px minmax(0, 1fr);
+gap: 55px;
+align-items: center;
+}
+
+/* Poster */
+.poster-section {
+width: 100%;
+}
+
+.movie-poster {
+display: block;
+width: 100%;
+height: 500px;
+object-fit: cover;
+border-radius: 14px;
+background: #151a28;
+border: 1px solid #292f3f;
+box-shadow: 0 18px 45px rgba(0, 0, 0, 0.4);
+}
+
+/* Movie Information */
+.movie-info {
+min-width: 0;
+}
+
+.section-label {
+margin: 0 0 15px;
+color: #ff6248;
+font-size: 12px;
+font-weight: 700;
+letter-spacing: 3px;
+}
+
+.movie-info h1 {
+margin: 0 0 22px;
+color: #ffffff;
+font-size: clamp(32px, 4vw, 44px);
+line-height: 1.2;
+overflow-wrap: anywhere;
+}
+
+/* Genre, Language, Duration */
+.movie-meta {
+display: flex;
+flex-wrap: wrap;
+gap: 10px;
+margin-bottom: 28px;
+}
+
+.movie-meta span {
+padding: 9px 13px;
+color: #d9deea;
+background: #191f2e;
+border: 1px solid #30384b;
+border-radius: 6px;
+font-size: 13px;
+}
+
+/* Release Date */
+.release-date {
+display: flex;
+flex-direction: column;
+gap: 7px;
+margin-bottom: 30px;
+color: #b9c0ce;
+font-size: 14px;
+}
+
+.release-date strong {
+color: #ffffff;
+}
+
+/* Description */
+.description-section {
+margin-bottom: 35px;
+}
+
+.description-section h2 {
+margin: 0 0 12px;
+color: #ffffff;
+font-size: 22px;
+}
+
+.description-section p {
+margin: 0;
+color: #aeb6c7;
+font-size: 15px;
+line-height: 1.8;
+overflow-wrap: anywhere;
+}
+
+/* Buttons */
+.details-actions {
+display: flex;
+flex-wrap: wrap;
+gap: 14px;
+align-items: center;
+}
+
+.details-actions a,
+.error-message a {
+display: inline-block;
+padding: 13px 20px;
+border-radius: 7px;
+font-size: 14px;
+font-weight: 600;
+text-align: center;
+text-decoration: none;
+transition:
+background 0.2s ease,
+transform 0.2s ease;
+}
+
+.back-button {
+color: #ffffff;
+background: #191f2e;
+border: 1px solid #3a4255;
+}
+
+.back-button:hover {
+background: #272e40;
+transform: translateY(-2px);
+}
+
+.view-shows-button {
+color: #ffffff;
+background: #ff4d30;
+border: 1px solid #ff4d30;
+}
+
+.view-shows-button:hover {
+background: #e83d22;
+transform: translateY(-2px);
+}
+
+/* Loading and Error States */
+.status-message,
+.error-message {
+width: min(800px, calc(100% - 40px));
+margin: 80px auto;
+padding: 28px;
+text-align: center;
+border-radius: 10px;
+font-size: 16px;
+}
+
+.status-message {
+color: #b9c0ce;
+background: #151a28;
+border: 1px solid #292f3f;
+}
+
+.error-message {
+color: #ffb2a5;
+background: #25151a;
+border: 1px solid #6b2931;
+}
+
+.error-message h2 {
+margin-top: 0;
+color: #ffffff;
+}
+
+.error-message p {
+margin-bottom: 22px;
+}
+
+/* Footer */
+.details-footer {
+padding: 22px 20px;
+text-align: center;
+background: #101522;
+border-top: 1px solid #242938;
+}
+
+.details-footer p {
+margin: 0;
+color: #8f96a7;
+font-size: 13px;
+}
+
+/* Tablet */
+@media (max-width: 850px) {
+.details-header {
+padding: 18px 25px;
+}
+
+.details-header nav {
+gap: 16px;
+}
+
+.details-container {
+grid-template-columns: 280px minmax(0, 1fr);
+gap: 30px;
+padding: 45px 25px;
+}
+
+.movie-poster {
+height: 420px;
+}
+}
+
+/* Mobile */
+@media (max-width: 650px) {
+.details-header {
+flex-direction: column;
+gap: 16px;
+padding: 20px 15px;
+}
+
+.details-header nav {
+justify-content: center;
+flex-wrap: wrap;
+gap: 15px;
+}
+
+.details-container {
+grid-template-columns: 1fr;
+gap: 28px;
+padding: 30px 20px;
+}
+
+.poster-section {
+max-width: 300px;
+margin: 0 auto;
+}
+
+.movie-poster {
+height: 420px;
+}
+
+.movie-info h1 {
+font-size: 32px;
+}
+
+.details-actions {
+flex-direction: column;
+align-items: stretch;
+}
+
+.details-actions a {
+width: 100%;
+box-sizing: border-box;
+}
+}

@@ -1,0 +1,395 @@
+<div class="admin-page">
+
+  <header class="admin-header">
+    <div>
+      <p class="eyebrow">MANAGEMENT PANEL</p>
+      <h1>Admin Dashboard</h1>
+      <p>Manage movies, theaters, screens and shows.</p>
+    </div>
+
+    <a routerLink="/movies" class="back-button">
+      View Movies →
+    </a>
+  </header>
+
+  @if (successMessage) {
+    <div class="success">{{ successMessage }}</div>
+  }
+
+  @if (errorMessage) {
+    <div class="error">
+      {{ errorMessage }}
+      <button type="button" (click)="loadDashboard()">Retry dashboard</button>
+    </div>
+  }
+
+  <section class="stats-grid">
+    <article class="stat-card">
+      <span>🎬 Movies</span>
+      <strong>{{ movies.length }}</strong>
+      <small>Movies in catalogue</small>
+    </article>
+
+    <article class="stat-card">
+      <span>🏢 Theaters</span>
+      <strong>{{ theaters.length }}</strong>
+      <small>Registered theaters</small>
+    </article>
+
+    <article class="stat-card">
+      <span>🖥️ Screens</span>
+      <strong>{{ screens.length }}</strong>
+      <small>Configured screens</small>
+    </article>
+
+    <article class="stat-card">
+      <span>🎟️ Shows</span>
+      <strong>{{ shows.length }}</strong>
+      <small>Scheduled shows</small>
+    </article>
+  </section>
+
+  @if (loading) {
+    <p class="status">Loading dashboard data...</p>
+  }
+
+  <!-- MOVIE MANAGEMENT -->
+  <section class="data-section">
+    <div class="section-heading">
+      <h2>Movie Catalogue</h2>
+      <button type="button" class="primary-button" (click)="openAddMovieForm()">
+        + Add Movie
+      </button>
+    </div>
+
+    @if (showMovieForm) {
+      <form class="management-form" (ngSubmit)="saveMovie()">
+        <h3>{{ editingMovieId !== null ? 'Edit Movie' : 'Add Movie' }}</h3>
+
+        <label>
+          Title
+          <input name="movieTitle" [(ngModel)]="movieForm.title" required />
+        </label>
+
+        <label>
+          Description
+          <textarea name="movieDescription" [(ngModel)]="movieForm.description" required></textarea>
+        </label>
+
+        <div class="form-grid">
+          <label>
+            Genre
+            <input name="movieGenre" [(ngModel)]="movieForm.genre" required />
+          </label>
+
+          <label>
+            Language
+            <select name="movieLanguage" [(ngModel)]="movieForm.language" required>
+              <option value="">Select language</option>
+              <option value="Odia">Odia</option>
+              <option value="Hindi">Hindi</option>
+              <option value="English">English</option>
+              <option value="Tamil">Tamil</option>
+              <option value="Telugu">Telugu</option>
+              <option value="Malayalam">Malayalam</option>
+              <option value="Kannada">Kannada</option>
+              <option value="Bengali">Bengali</option>
+            </select>
+          </label>
+
+          <label>
+            Duration (minutes)
+            <input type="number" name="movieDuration" [(ngModel)]="movieForm.duration" min="1" required />
+          </label>
+
+          <label>
+            Release date
+            <input type="date" name="movieReleaseDate" [(ngModel)]="movieForm.releaseDate" required />
+          </label>
+        </div>
+
+        <label>
+          Poster URL
+          <input type="url" name="moviePosterUrl" [(ngModel)]="movieForm.posterUrl" required />
+        </label>
+
+        <div class="form-actions">
+          <button type="submit" class="primary-button">Save Movie</button>
+          <button type="button" class="secondary-button" (click)="cancelMovieForm()">Cancel</button>
+        </div>
+      </form>
+    }
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Language</th>
+            <th>Genre</th>
+            <th>Duration</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (movie of movies; track movie.id) {
+            <tr>
+              <td>{{ movie.id }}</td>
+              <td>{{ movie.title }}</td>
+              <td>{{ movie.language }}</td>
+              <td>{{ movie.genre }}</td>
+              <td>{{ movie.duration }} min</td>
+              <td class="actions">
+                <button type="button" class="edit-button" (click)="editMovie(movie)">Edit</button>
+                <button type="button" class="delete-button" (click)="deleteMovie(movie)">Delete</button>
+              </td>
+            </tr>
+          } @empty {
+            <tr><td colspan="6">No movies available.</td></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- THEATER MANAGEMENT -->
+  <section class="data-section">
+    <div class="section-heading">
+      <h2>Theater Management</h2>
+      <button type="button" class="primary-button" (click)="openAddTheaterForm()">
+        + Add Theater
+      </button>
+    </div>
+
+    @if (showTheaterForm) {
+      <form class="management-form" (ngSubmit)="saveTheater()">
+        <h3>{{ editingTheaterId !== null ? 'Edit Theater' : 'Add New Theater' }}</h3>
+
+        <label>
+          Theater Name
+          <input name="theaterName" [(ngModel)]="theaterForm.name" placeholder="Enter theater name" required />
+        </label>
+
+        <label>
+          Location
+          <input name="theaterLocation" [(ngModel)]="theaterForm.location" placeholder="Enter location" required />
+        </label>
+
+        <div class="form-actions">
+          <button type="submit" class="primary-button">
+            {{ editingTheaterId !== null ? 'Save Changes' : 'Add Theater' }}
+          </button>
+          <button type="button" class="secondary-button" (click)="cancelTheaterForm()">Cancel</button>
+        </div>
+      </form>
+    }
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Theater Name</th>
+            <th>Location</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (theater of theaters; track theater.id) {
+            <tr>
+              <td>{{ theater.id }}</td>
+              <td>{{ theater.name }}</td>
+              <td>{{ theater.location }}</td>
+              <td class="actions">
+                <button type="button" class="edit-button" (click)="editTheater(theater)">Edit</button>
+                <button type="button" class="delete-button" (click)="deleteTheater(theater)">Delete</button>
+              </td>
+            </tr>
+          } @empty {
+            <tr><td colspan="4">No theaters available.</td></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- SCREEN MANAGEMENT -->
+  <section class="data-section">
+    <div class="section-heading">
+      <h2>Screen Management</h2>
+      <button type="button" class="primary-button" (click)="openAddScreenForm()">
+        + Add Screen
+      </button>
+    </div>
+
+    @if (showScreenForm) {
+      <form class="management-form" (ngSubmit)="saveScreen()">
+        <h3>{{ editingScreenId !== null ? 'Edit Screen' : 'Add New Screen' }}</h3>
+
+        <label>
+          Screen Name
+          <input name="screenName" [(ngModel)]="screenForm.name" placeholder="e.g. Screen 2" required />
+        </label>
+
+        <div class="form-grid">
+          <label>
+            Total Seats
+            <input type="number" name="screenTotalSeats" [(ngModel)]="screenForm.totalSeats" min="1" step="1" required />
+          </label>
+
+          <label>
+            Theater
+            <select name="screenTheaterId" [(ngModel)]="screenForm.theaterId" required>
+              <option [ngValue]="null">Select theater</option>
+              @for (theater of theaters; track theater.id) {
+                <option [ngValue]="theater.id">
+                  {{ theater.name }} (ID: {{ theater.id }})
+                </option>
+              }
+            </select>
+          </label>
+        </div>
+
+        @if (theaters.length === 0) {
+          <p class="status">Add a theater before creating a screen.</p>
+        }
+
+        <div class="form-actions">
+          <button type="submit" class="primary-button" [disabled]="theaters.length === 0">
+            {{ editingScreenId !== null ? 'Save Changes' : 'Add Screen' }}
+          </button>
+          <button type="button" class="secondary-button" (click)="cancelScreenForm()">Cancel</button>
+        </div>
+      </form>
+    }
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Screen Name</th>
+            <th>Total Seats</th>
+            <th>Theater</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (screen of screens; track screen.id) {
+            <tr>
+              <td>{{ screen.id }}</td>
+              <td>{{ screen.name }}</td>
+              <td>{{ screen.totalSeats }}</td>
+              <td>{{ getTheaterName(screen.theaterId) }}</td>
+              <td class="actions">
+                <button type="button" class="edit-button" (click)="editScreen(screen)">Edit</button>
+                <button type="button" class="delete-button" (click)="deleteScreen(screen)">Delete</button>
+              </td>
+            </tr>
+          } @empty {
+            <tr><td colspan="5">No screens available.</td></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- SHOW MANAGEMENT -->
+  <section class="data-section">
+    <div class="section-heading">
+      <h2>Show Management</h2>
+      <button type="button" class="primary-button" (click)="openAddShowForm()">
+        + Schedule Show
+      </button>
+    </div>
+
+    @if (showShowForm) {
+      <form class="management-form" (ngSubmit)="saveShow()">
+        <h3>{{ editingShowId !== null ? 'Edit Show' : 'Schedule New Show' }}</h3>
+
+        <div class="form-grid">
+          <label>
+            Movie
+            <select name="showMovieId" [(ngModel)]="showForm.movieId" required>
+              <option [ngValue]="null">Select movie</option>
+              @for (movie of movies; track movie.id) {
+                <option [ngValue]="movie.id">{{ movie.title }} (ID: {{ movie.id }})</option>
+              }
+            </select>
+          </label>
+
+          <label>
+            Screen
+           <select name="showScreenId" [(ngModel)]="showForm.screenId" required>
+  <option [ngValue]="null">Select screen</option>
+  @for (screen of screens; track screen.id) {
+    <option [ngValue]="screen.id">
+      {{ getTheaterName(screen.theaterId) }} - {{ screen.name }} (Screen ID: {{ screen.id }})
+    </option>
+  }
+</select>
+          </label>
+
+          <label>
+            Show date
+            <input type="date" name="showDate" [(ngModel)]="showForm.showDate" required />
+          </label>
+
+          <label>
+            Show time
+            <input type="time" name="showTime" [(ngModel)]="showForm.showTime" required />
+          </label>
+        </div>
+
+        @if (movies.length === 0 || screens.length === 0) {
+          <p class="status">You need at least one movie and one screen to schedule a show.</p>
+        } 
+
+        <div class="form-actions">
+          <button type="submit" class="primary-button" [disabled]="movies.length === 0 || screens.length === 0">
+            {{ editingShowId !== null ? 'Save Changes' : 'Create Show' }}
+          </button>
+          <button type="button" class="secondary-button" (click)="cancelShowForm()">Cancel</button>
+        </div>
+      </form>
+    }
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Movie</th>
+            <th>Screen</th>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          @for (show of shows; track show.id) {
+            <tr>
+              <td>{{ show.id }}</td>
+              <td>{{ getMovieTitle(show.movieId) }}</td>
+              <td>{{ getScreenName(show.screenId) }}</td>
+              <td>{{ show.showDate || '—' }}</td>
+              <td>{{ show.showTime || '—' }}</td>
+              <td class="actions">
+                <button type="button" class="edit-button" (click)="editShow(show)">Edit</button>
+                <button type="button" class="delete-button" (click)="deleteShow(show)">Delete</button>
+              </td>
+            </tr>
+          } @empty {
+            <tr><td colspan="6">No shows available.</td></tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</div>

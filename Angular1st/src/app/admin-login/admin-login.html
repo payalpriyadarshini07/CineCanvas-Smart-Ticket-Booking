@@ -1,0 +1,36 @@
+<div class="admin-login-page">
+  <div class="login-card">
+    <div class="admin-icon">🛡️</div>
+
+    <h1>Admin Portal</h1>
+    <p class="subtitle">Sign in to manage Smart Ticket Booking</p>
+
+    <form (ngSubmit)="login()">
+      <label for="adminId">Admin ID</label>
+      <input
+        id="adminId"
+        type="text"
+        name="adminId"
+        [(ngModel)]="adminId"
+        placeholder="Enter Admin ID"
+        required
+      >
+
+      <label for="password">Password</label>
+      <input
+        id="password"
+        type="password"
+        name="password"
+        [(ngModel)]="password"
+        placeholder="Enter Password"
+        required
+      >
+
+      <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+      <button type="submit">Login to Admin Dashboard →</button>
+    </form>
+
+    <a routerLink="/movies" class="back-link">← Back to Movies</a>
+  </div>
+</div>

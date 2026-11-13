@@ -1,0 +1,92 @@
+<div class="show-page">
+
+  <section class="show-hero">
+    <p class="section-label">YOUR MOVIE EXPERIENCE</p>
+    <h1>Select a Show</h1>
+    <p>Choose a date and showtime that works for you.</p>
+  </section>
+
+  @if (loading) {
+    <div class="status-message">
+      <p>Loading available shows...</p>
+    </div>
+  }
+
+  @else if (errorMessage) {
+    <div class="error-message">
+      <h3>Unable to Load Shows</h3>
+      <p>{{ errorMessage }}</p>
+    </div>
+  }
+
+  @else {
+    <section class="show-content">
+
+      <div class="results-heading">
+        <h2>Available Showtimes</h2>
+        <span class="show-count">
+          {{ shows.length }}
+          {{ shows.length === 1 ? 'Show' : 'Shows' }}
+        </span>
+      </div>
+
+      @if (shows.length > 0) {
+        <div class="show-grid">
+
+          @for (show of shows; track show.id) {
+            <article class="show-card">
+
+              <div class="show-date">
+                <span class="date-icon">📅</span>
+                <span>{{ show.showDate }}</span>
+              </div>
+
+              <div class="show-info">
+                <h3>Screen {{ show.screenId }}</h3>
+
+                <p class="show-time-label">SHOWTIME</p>
+
+                <div class="show-time">
+                  🕒 {{ show.showTime }}
+                </div>
+              </div>
+
+              <div class="show-actions">
+
+              <a
+  class="book-button"
+  [href]="getSeatMapUrl(show.id, show.screenId)"
+  target="_blank"
+>
+  Book Seats →
+</a>
+
+              </div>
+
+            </article>
+          }
+
+        </div>
+      }
+
+      @else {
+        <div class="empty-state">
+          <div class="empty-icon">🎬</div>
+
+          <h3>No Shows Available</h3>
+
+          <p>
+            There are currently no shows scheduled for this movie.
+            Please check again later.
+          </p>
+
+          <a routerLink="/movies" class="browse-button">
+            Browse Other Movies
+          </a>
+        </div>
+      }
+
+    </section>
+  }
+
+</div>

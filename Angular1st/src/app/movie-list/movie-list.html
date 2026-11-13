@@ -1,0 +1,142 @@
+
+<div class="movie-page">
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <p class="hero-small-title">MOVIE COLLECTION</p>
+    <h1>Explore Movies</h1>
+    <p>Discover movies and find your perfect movie experience.</p>
+  </section>
+
+  <!-- Search and Filters -->
+  <section class="filter-section">
+
+    <!-- Search Box -->
+    <div class="search-box">
+      🔍
+      <input
+        type="text"
+        placeholder="Search movies..."
+        [(ngModel)]="searchText"
+        (ngModelChange)="filterMovies()"
+      />
+    </div>
+
+    <!-- Genre Filter -->
+    <div class="filter-box">
+      <label for="genre">Genre</label>
+
+      <select
+        id="genre"
+        [(ngModel)]="selectedGenre"
+        (ngModelChange)="filterMovies()"
+      >
+        <option value="All Genres">All Genres</option>
+        <option value="Action">Action</option>
+        <option value="Comedy">Comedy</option>
+        <option value="Drama">Drama</option>
+        <option value="Sci-Fi">Sci-Fi</option>
+        <option value="Thriller">Thriller</option>
+        <option value="Education">Education</option>
+      </select>
+    </div>
+
+    <!-- Language Filter -->
+    <div class="filter-box">
+      <label for="language">Language</label>
+
+      <select
+        id="language"
+        [(ngModel)]="selectedLanguage"
+        (ngModelChange)="filterMovies()"
+      >
+        <option value="All Languages">All Languages</option>
+        <option value="English">English</option>
+        <option value="Hindi">Hindi</option>
+        <option value="Odia">Odia</option>
+      </select>
+    </div>
+
+  </section>
+
+  <!-- Loading State -->
+  @if (loading) {
+    <p class="no-movies">Loading movies...</p>
+  }
+
+  <!-- Error State -->
+  @else if (errorMessage) {
+    <p class="no-movies">{{ errorMessage }}</p>
+  }
+
+  <!-- Movie Results -->
+  @else {
+
+    <div class="movie-count">
+      {{ filteredMovies.length }}
+      {{ filteredMovies.length === 1 ? 'Movie' : 'Movies' }} Found
+    </div>
+
+    <section class="movie-grid">
+
+      @for (movie of filteredMovies; track movie.id) {
+
+        <article class="movie-card">
+
+          <!-- Movie Poster -->
+          <div class="poster-container">
+            <img
+              [src]="movie.posterUrl"
+              [alt]="movie.title"
+            />
+
+            <div class="rating">⭐ 4.8</div>
+          </div>
+
+          <!-- Movie Information -->
+          <div class="movie-info">
+            <h2>{{ movie.title }}</h2>
+
+            <p class="movie-meta">
+              {{ movie.genre }} •
+              {{ movie.language }} •
+              {{ movie.duration }} min
+            </p>
+
+            <!-- Actions -->
+            <div class="movie-actions">
+
+              <a
+                [routerLink]="['/movies', movie.id]"
+                class="details-button"
+              >
+                Details
+              </a>
+
+              <a
+                [routerLink]="['/movies', movie.id]"
+                class="book-button"
+              >
+                Book Now
+              </a>
+
+            </div>
+          </div>
+
+        </article>
+
+      }
+
+    </section>
+
+    <!-- No Results -->
+    @if (filteredMovies.length === 0) {
+      <div class="no-movies">
+        <h3>No movies found</h3>
+        <p>Try changing your search or filters.</p>
+      </div>
+    }
+
+  }
+
+</div>

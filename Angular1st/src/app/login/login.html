@@ -1,0 +1,129 @@
+<div class="auth-layout">
+
+  <!-- LEFT SIDE: LOGIN FORM -->
+  <section class="form-side">
+
+    <a routerLink="/movies" class="brand">
+      <span class="brand-icon">S</span>
+      SMART<span class="highlight">TICKET</span>
+    </a>
+
+    <div class="form-container">
+
+      <div class="form-heading">
+        <span class="eyebrow">WELCOME BACK</span>
+        <h1>Sign in to your account</h1>
+        <p>Enter your details to continue your movie experience.</p>
+      </div>
+
+      <form #loginForm="ngForm" (ngSubmit)="login()">
+
+        <div class="input-group">
+          <label>Email Address</label>
+          <input
+            type="email"
+            name="email"
+            [(ngModel)]="email"
+            placeholder="name@example.com"
+            required
+            email
+          />
+        </div>
+
+        <div class="input-group">
+          <label>Password</label>
+          <input
+            type="password"
+            name="password"
+            [(ngModel)]="password"
+            placeholder="Enter your password"
+            required
+          />
+        </div>
+
+        <p class="message" *ngIf="message">
+          {{ message }}
+        </p>
+
+        <button
+          type="submit"
+          class="submit-button"
+          [disabled]="loginForm.invalid">
+          Sign In →
+        </button>
+
+      </form>
+
+      <div class="switch-link">
+        Don't have an account?
+        <a routerLink="/register">Create an account</a>
+      </div>
+
+    </div>
+
+    <p class="copyright">© 2026 SmartTicket. All rights reserved.</p>
+
+  </section>
+
+
+  <!-- RIGHT SIDE: WELCOME MESSAGE -->
+  <section class="welcome-side">
+
+    <div class="welcome-overlay"></div>
+
+    <div class="welcome-content">
+
+      <span class="welcome-tag">YOUR MOVIE JOURNEY STARTS HERE</span>
+
+      <h1>
+        Every great story<br>
+        deserves a <span>great seat.</span>
+      </h1>
+
+      <p>
+        Discover amazing movies, choose your favourite seats,
+        and enjoy unforgettable cinematic experiences.
+      </p>
+
+      <div class="feature-list">
+
+        <div class="feature">
+          <span>✦</span>
+          <div>
+            <strong>Easy Booking</strong>
+            <small>Book your favourite movie in seconds.</small>
+          </div>
+        </div>
+
+        <div class="feature">
+          <span>♧</span>
+          <div>
+            <strong>Choose Your Seat</strong>
+            <small>Select the perfect seat for your experience.</small>
+          </div>
+        </div>
+
+        <div class="feature">
+          <span>✓</span>
+          <div>
+            <strong>Secure Payments</strong>
+            <small>Enjoy a simple and secure checkout.</small>
+          </div>
+        </div>
+
+      </div>
+
+      <a routerLink="/movies" class="explore-link">
+        Explore Movies →
+      </a>
+
+    </div>
+
+    <div class="decorative-circle circle-one"></div>
+    <div class="decorative-circle circle-two"></div>
+
+    <span class="side-footer">MADE FOR BETTER MOVIE EXPERIENCES</span>
+
+  </section>
+
+</div>

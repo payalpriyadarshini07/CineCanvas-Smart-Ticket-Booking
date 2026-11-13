@@ -1,0 +1,65 @@
+<div class="customers-page">
+
+  <header class="page-header">
+    <div>
+      <span>ADMINISTRATION</span>
+      <h1>Customer Management</h1>
+      <p>View and manage registered SmartTicket customers.</p>
+    </div>
+
+    <button (click)="loadCustomers()">↻ Refresh</button>
+  </header>
+
+  <div class="summary-card">
+    <h2>{{ customers.length }}</h2>
+    <p>Total Registered Customers</p>
+  </div>
+
+  <div class="search-box">
+    <input
+      type="text"
+      placeholder="Search by name, email or phone..."
+      [(ngModel)]="searchText"
+      (input)="searchCustomers()"
+    >
+  </div>
+
+  <p *ngIf="loading">Loading customers...</p>
+
+  <p class="error-message" *ngIf="errorMessage">
+    {{ errorMessage }}
+  </p>
+
+  <div class="table-container" *ngIf="!loading && !errorMessage">
+    <table>
+      <thead>
+        <tr>
+          <th>Customer ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Registration Date</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let customer of filteredCustomers">
+          <td>#{{ customer.id }}</td>
+          <td>{{ customer.name }}</td>
+          <td>{{ customer.email }}</td>
+          <td>{{ customer.phone || 'N/A' }}</td>
+          <td>{{ customer.createdAt | date:'dd MMM yyyy' }}</td>
+        </tr>
+
+        <tr *ngIf="filteredCustomers.length === 0">
+          <td colspan="5">No customers found.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <button class="back-button" routerLink="/admin-dashboard">
+    ← Back to Dashboard
+  </button>
+
+</div>
