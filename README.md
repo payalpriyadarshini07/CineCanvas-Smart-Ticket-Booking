@@ -56,57 +56,58 @@ The system is designed using a modular full-stack architecture with separate fro
 
 ```text
 
-&#x20;                   ┌──────────────────────┐
+                    ┌──────────────────────┐
 
-&#x20;                   │      CineCanvas      │
+                    │      CineCanvas      │
 
-&#x20;                   │ Smart Ticket Booking │
+                    │ Smart Ticket Booking │
 
-&#x20;                   └──────────┬───────────┘
+                    └──────────┬───────────┘
 
-&#x20;                              │
+                               │
 
-&#x20;                ┌─────────────┴─────────────┐
+                 ┌─────────────┴─────────────┐
 
-&#x20;                │                           │
+                 │                           │
 
-&#x20;       ┌────────▼────────┐        ┌────────▼────────┐
+        ┌────────▼────────┐        ┌────────▼────────┐
 
-&#x20;       │ Angular 21      │        │ Spring Boot     │
+        │ Angular 21      │        │ Spring Boot     │
 
-&#x20;       │ Frontend        │◄──────►│ Backend         │
+        │ Frontend        │◄──────►│ Backend         │
 
-&#x20;       └────────┬────────┘        └────────┬────────┘
+        └────────┬────────┘        └────────┬────────┘
 
-&#x20;                │                          │
+                 │                          │
 
-&#x20;                │                 ┌────────▼────────┐
+                 │                 ┌────────▼────────┐
 
-&#x20;                │                 │     MySQL        │
+                 │                 │     MySQL        │
 
-&#x20;                │                 │    Database      │
+                 │                 │    Database      │
 
-&#x20;                │                 └─────────────────┘
+                 │                 └─────────────────┘
 
-&#x20;                │
+                 │
 
-&#x20;       ┌────────▼────────┐
+        ┌────────▼────────┐
 
-&#x20;       │ Redis / Memurai │
+        │ Redis / Memurai │
 
-&#x20;       │ Seat Locking    │
+        │ Seat Locking    │
 
-&#x20;       └─────────────────┘
+        └─────────────────┘
 
-&#x20;                
+                 
 
-&#x20;       External Services:
+        External Services:
 
-&#x20;       • Razorpay Payment Gateway
+        • Razorpay Payment Gateway
 
-&#x20;       • AI Services
+        • AI Services
 
-&#x20;       • Kafka Event Processing
+        • Kafka Event Processing
+
 
 
 
